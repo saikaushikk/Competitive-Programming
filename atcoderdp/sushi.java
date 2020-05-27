@@ -187,10 +187,42 @@ class Main{
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int t = in.nextInt();
-        while(t-- >0)
+        int n = in.nextInt();
+        int one =0,two = 0, three = 0;
+        for(int i=0;i<n;i++)
         {
+            int x = in.nextInt();
+            if(x==1)
+                one++;
+            else if(x==2)
+                two++;
+            else
+                three++;
         }
+        double[][][] dp = new double[n+2][n+2][n+2];
+        for(int k=0;k<=n;k++)
+        {
+            for(int j=0;j<=n;j++)
+            {
+                for(int i=0;i<=n;i++)
+                {
+                    if(i==0 && j==0 && k==0)
+                        continue;
+                    if(i+j+k>n)
+                        continue;
+                    double sum = i+j+k,p=(n/sum);
+                    if(i>0)
+                        dp[i][j][k] += dp[i-1][j][k] * i/sum;
+                    if(j>0)
+                        dp[i][j][k] += dp[i+1][j-1][k] * j/sum;
+                    if(k>0)
+                        dp[i][j][k] += dp[i][j+1][k-1] * k/sum;
+                    dp[i][j][k] +=p;
+                }
+            }
+        }
+        out.printLine(dp[one][two][three]);
+        //out.printLine(dp[three][two][one]);
         out.flush();
         out.close();
     }

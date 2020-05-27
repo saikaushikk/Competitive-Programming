@@ -187,10 +187,22 @@ class Main{
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int t = in.nextInt();
-        while(t-- >0)
+        int n = in.nextInt(),k = in.nextInt();
+        int[] arr = in.nextIntArray(n);
+        boolean[] dp = new boolean[k+1];
+        //dp[i] - if the person plays from i stones they will win if dp[i] is true else they lose 
+        dp[0] = false;
+        for(int s = 1;s<=k;s++)
         {
+            for(int i=0;i<n;i++)
+            {
+                if(s>=arr[i] && !dp[s-arr[i]])
+                {
+                    dp[s] = true;
+                }
+            }
         }
+        out.printLine(dp[k]?"First":"Second");
         out.flush();
         out.close();
     }
