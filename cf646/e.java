@@ -69,7 +69,7 @@ class Main{
             } while (!isSpaceChar(c));
             return res * sgn;
         }
-
+        
         public int[] nextIntArray(int n) {
             int a[] = new int[n];
             for (int i = 0; i < n; i++) {
@@ -162,50 +162,77 @@ class Main{
         }
 
     }
-    static int gcd(int a, int b) 
-    { 
-        if (a == 0) 
-            return b; 
-        return gcd(b % a, a); 
-    } 
-    static int mod = (int)(1e9+7);
-    public static long pow(long a,long b)
+    static int[] a,b,c,min;
+    static List<List<Integer>> adj;
+    static long res;
+    public static int[] dfs(int node,int par)
     {
-        long ans = 1;
-        while(b> 0)
+        int[] bad = new int[2];
+        if(b[node]!=c[node])
         {
-            if((b & 1)==1){
-                ans = (ans*a) % mod; 
-            }
-            a = (a*a) % mod;
-            b = b>>1;
+            bad[b[node]]++;
         }
-        return ans;
+        for(int child:adj.get(node))
+        {
+            if(child==par)
+                continue;
+            min[child] = Math.min(min[node],a[child]);
+            int[] rem = dfs(child,node);
+            bad[rem[0]]+=rem[1];
+        }
+        int x = Math.min(bad[0],bad[1]);
+        res+=(long)(2L*x*min[node]);
+        bad[0]-=x;
+        bad[1]-=x;  
+        if(bad[0]==0 && bad[1]==0)
+        {
+            return new int[]{0,0};
+        }
+        if(bad[0]>0)
+        {
+            if(par==0)
+            {
+                res = -1;
+            }
+            return new int[]{0,bad[0]};
+        }
+        else{
+            if(par==0){
+                res = -1;
+            }
+            return new int[]{1,bad[1]};
+        }
     }
-
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
         int n = in.nextInt();
-        int[] a = in.nextIntArray(n);
-        long ans = 0;
-        for(int i=1;i<=30;i++)
+        a = new int[n+1];
+        b = new int[n+1];
+        c = new int[n+1];
+        min = new int[n+1];
+        adj = new ArrayList<>();
+        for(int i=1;i<=n;i++)
         {
-            long sum = 0;
-            for(int j=0;j<n;j++)
-            {
-                if(a[j]>i)
-                {
-                    sum = 0;
-                    continue;
-                }
-                sum+=a[j];
-                sum = Math.max(sum,0);
-                ans = Math.max(ans,sum-i);
-            }
+            int[] temp = in.nextIntArray(3);
+            a[i] = temp[0];
+            b[i] = temp[1];
+            c[i] = temp[2];
         }
-        out.printLine(ans);
+        for(int i=0;i<=n;i++)
+            adj.add(new ArrayList<>());
+        for(int i=0;i<n-1;i++)
+        {
+            int u = in.nextInt(),v = in.nextInt();
+            adj.get(u).add(v);
+            adj.get(v).add(u);
+        }
+       // System.out.println(Arrays.toString(a) + " " + Arrays.toString(b) + " " + Arrays.toString(c));
+        min[1] = a[1];
+        res = 0;
+        dfs(1,0);
+        out.printLine(res);
         out.flush();
         out.close();
     }

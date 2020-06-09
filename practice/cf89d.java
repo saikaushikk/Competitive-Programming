@@ -168,7 +168,7 @@ class Main{
             return b; 
         return gcd(b % a, a); 
     } 
-    static int mod = (int)(1e9+7);
+    static int mod = (int)(1e8);
     public static long pow(long a,long b)
     {
         long ans = 1;
@@ -182,30 +182,42 @@ class Main{
         }
         return ans;
     }
-
+    static int k1,k2,N;
+    static Long[][][][] dp;
+    public static long dfs(int i,int n1,int n2,int count1,int count2)
+    {
+        if(i==N)
+            return 1;
+        long res = 0;
+        if(dp[n1][n2][count1][count2]!=null){
+           // System.out.println("hi");
+            return dp[n1][n2][count1][count2];
+        }
+        if(n1>0)
+        {
+            if(count1<k1)
+                res =(res +dfs(i+1,n1-1,n2,count1+1,0))%mod;
+        }
+        if(n2>0)
+        {
+            if(count2<k2)
+            {
+                res=(res+dfs(i+1,n1,n2-1,0,count2+1))%mod;
+            }
+        }
+        return dp[n1][n2][count1][count2]=res;
+    }
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt();
-        int[] a = in.nextIntArray(n);
-        long ans = 0;
-        for(int i=1;i<=30;i++)
-        {
-            long sum = 0;
-            for(int j=0;j<n;j++)
-            {
-                if(a[j]>i)
-                {
-                    sum = 0;
-                    continue;
-                }
-                sum+=a[j];
-                sum = Math.max(sum,0);
-                ans = Math.max(ans,sum-i);
-            }
-        }
-        out.printLine(ans);
+        int n1 = in.nextInt();
+        int n2 = in.nextInt();
+        k1 = in.nextInt();
+        k2 = in.nextInt();
+        N = n1+n2;
+        dp = new Long[n1+1][n2+1][k1+1][k2+1];
+        out.printLine(dfs(0,n1,n2,0,0));
         out.flush();
         out.close();
     }

@@ -182,30 +182,51 @@ class Main{
         }
         return ans;
     }
-
+    static int[] path;
+    // boolean[] visited;
+    public static void dfs(List<List<Integer>> adj,int cur,int len)
+    {
+        if(len==2)
+        {
+            path[cur]++;
+            return;
+        }
+        // visited[cur] = true;
+        for(int i:adj.get(cur))
+        {
+            
+            
+                dfs(adj,i,len+1);
+            
+        }
+    }
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
-        //IOUtils io = new IOUtils();
-        int n = in.nextInt();
-        int[] a = in.nextIntArray(n);
-        long ans = 0;
-        for(int i=1;i<=30;i++)
+        int n = in.nextInt(),m = in.nextInt();
+        List<List<Integer>> adj = new ArrayList<>();
+        for(int i=0;i<=n;i++)
+            adj.add(new ArrayList<>());
+        for(int i=0;i<m;i++)
         {
-            long sum = 0;
-            for(int j=0;j<n;j++)
+            int a = in.nextInt(),b = in.nextInt();
+            adj.get(a).add(b);
+        }
+        long res = 0;
+        path = new int[n+1];
+        for(int i=1;i<=n;i++)
+        {
+            Arrays.fill(path,0);
+            dfs(adj,i,0);
+            for(int j=1;j<=n;j++)
             {
-                if(a[j]>i)
+                if(j!=i)
                 {
-                    sum = 0;
-                    continue;
+                    res+=(path[j]*(path[j]-1))/2;
                 }
-                sum+=a[j];
-                sum = Math.max(sum,0);
-                ans = Math.max(ans,sum-i);
             }
         }
-        out.printLine(ans);
+        out.printLine(res);
         out.flush();
         out.close();
     }

@@ -182,30 +182,130 @@ class Main{
         }
         return ans;
     }
-
+    public static boolean isValid1(int x,int y,int z,int u,int v,int w)
+    {
+        if(x==y && y==z)
+        {
+            return true;
+        }
+        else if(x==y && z==0)
+        {
+            return true;
+        }
+        else if(y==z && x==0)
+        {
+            return true;
+        }
+        else if(x==z && y==0)
+        {
+            return true;
+        }
+        else if(x==0 && y==0)
+        {
+            return true;
+        }
+        else if(y==0 && z==0)
+            return true;
+        else if(x==0 && z==0)
+            return true;
+        else if(u==v && v==w)
+        {
+            return true;
+        }
+        else if(u==v && z==0)
+            return true;
+        else if(v==w && x==0)
+            return true;
+        else if(u==w && y==0)
+            return true;
+        else 
+            return false;
+    }
+    public static boolean isValid2(int x,int y,int z,int u,int v,int w)
+    {
+        if(x==y)
+        {
+            return true;
+        }
+        else if(y==z)
+        {
+            return true;
+        }
+        else if(x==z)
+        {
+            return true;
+        }
+        else if(x==0 || y==0 || z==0)
+        {
+            return true;
+        }
+        else if(u==v)
+        {
+            return true;
+        }
+        else if(v==w)
+        {
+            return true;
+        }
+        else if(u==v)
+        {
+            return true;
+        }
+        else 
+            return false;
+    }
+    public static int mx = 1000000000;
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt();
-        int[] a = in.nextIntArray(n);
-        long ans = 0;
-        for(int i=1;i<=30;i++)
+        int tt= in.nextInt();
+        while(tt-- >0)
         {
-            long sum = 0;
-            for(int j=0;j<n;j++)
+            int[] n = in.nextIntArray(3);
+            int[] t = in.nextIntArray(3);
+            int x = t[0]-n[0],y=t[1]-n[1],z = t[2]-n[2];
+            int u=-mx+1,v=mx+2,w=mx+3;
+            if(n[0]!=0)
             {
-                if(a[j]>i)
+                if(Math.abs(t[0])>=Math.abs(n[0]) && (Math.abs(t[0])%Math.abs(n[0]))==0)
                 {
-                    sum = 0;
-                    continue;
+                    u = t[0]/n[0];
                 }
-                sum+=a[j];
-                sum = Math.max(sum,0);
-                ans = Math.max(ans,sum-i);
             }
+            if(n[1]!=0)
+            {
+                if(Math.abs(t[1])>=Math.abs(n[1]) && (Math.abs(t[1])%Math.abs(n[1]))==0)
+                {
+                    v = t[1]/n[1];
+                }
+            }
+            if(n[2]!=0)
+            {
+                if(Math.abs(t[2])>=Math.abs(n[2]) && (Math.abs(t[2])%Math.abs(n[2]))==0)
+                {
+                    w = t[2]/n[2];
+                }
+            }
+         //   out.printLine(u + " " + v + " " + w);
+            if(x==0 && y==0 && z==0)
+            {
+                out.printLine("0");
+                continue;
+            }
+            if(isValid1(x, y, z, u, v, w))
+            {
+                out.printLine("1");
+            }
+            else if(isValid2(x,y,z,u,v,w))
+            {
+                out.printLine("2");
+            }
+            else {
+                out.printLine("3");
+            }
+
         }
-        out.printLine(ans);
         out.flush();
         out.close();
     }

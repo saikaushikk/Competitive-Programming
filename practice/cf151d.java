@@ -187,25 +187,48 @@ class Main{
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt();
-        int[] a = in.nextIntArray(n);
-        long ans = 0;
-        for(int i=1;i<=30;i++)
+        int n = in.nextInt(),m = in.nextInt();
+        int[] c = new int[n+1];
+        Map<Integer,Set<Integer>> map = new TreeMap<>();
+        for(int i=1;i<=n;i++)
         {
-            long sum = 0;
-            for(int j=0;j<n;j++)
-            {
-                if(a[j]>i)
-                {
-                    sum = 0;
-                    continue;
-                }
-                sum+=a[j];
-                sum = Math.max(sum,0);
-                ans = Math.max(ans,sum-i);
+            c[i] = in.nextInt();
+            map.put(c[i],new HashSet<>());
+        }
+     
+        for(int i=0;i<m;i++)
+        {
+            int a = in.nextInt(),b = in.nextInt();
+            if(c[a]!=c[b]){
+                map.get(c[a]).add(c[b]);
+                map.get(c[b]).add(c[a]);
             }
         }
-        out.printLine(ans);
+        // for(int i=1;i<=n;i++)
+        // {
+        //     List<Integer> cur = adj.get(i);
+        //     Set<Integer> temp = new HashSet<>();
+        //     for(int nbr:cur)
+        //     {
+        //         if(nbr==i)
+        //             continue;
+        //         temp.add(c[nbr]);
+        //     }
+        //     if(temp.contains(c[i]))
+        //         temp.remove(c[i]);
+        //     map.put(c[i],map.getOrDefault(c[i], 0)+ temp.size());
+        // }
+        int res = -1,max=-1;
+        for(int k:map.keySet())
+        {
+            if(map.get(k).size()>max)
+            {
+                res = k;
+                max = map.get(k).size();
+            }
+        }
+        //out.printLine(map);
+        out.printLine(res);
         out.flush();
         out.close();
     }

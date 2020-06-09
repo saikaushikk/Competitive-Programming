@@ -182,31 +182,36 @@ class Main{
         }
         return ans;
     }
-
+    static Long[][] dp;
+    public static long dfs(int len,int n,int k,int last)
+    {
+        if(len==k)
+            return 1;
+        if(dp[len][last]!=null)
+        {
+            // System.out.println("Hi");
+            return dp[len][last];
+        }
+        long res=0;
+        for(int i=last;i<=n;i+=last)
+        {
+            if(i%last==0)
+            {
+                res = (res + dfs(len+1,n,k,i))%mod;
+            }
+        }
+        res = res % mod;
+        return dp[len][last] = res;
+    } 
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt();
-        int[] a = in.nextIntArray(n);
-        long ans = 0;
-        for(int i=1;i<=30;i++)
-        {
-            long sum = 0;
-            for(int j=0;j<n;j++)
-            {
-                if(a[j]>i)
-                {
-                    sum = 0;
-                    continue;
-                }
-                sum+=a[j];
-                sum = Math.max(sum,0);
-                ans = Math.max(ans,sum-i);
-            }
-        }
-        out.printLine(ans);
+        int n = in.nextInt(),k = in.nextInt();
+        dp = new Long[k+1][n+1];
+        out.printLine(dfs(0,n,k,1));
         out.flush();
         out.close();
+        
     }
 }

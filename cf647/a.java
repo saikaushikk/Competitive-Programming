@@ -187,25 +187,96 @@ class Main{
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt();
-        int[] a = in.nextIntArray(n);
-        long ans = 0;
-        for(int i=1;i<=30;i++)
+        int t = in.nextInt();
+        while(t-- >0)
         {
-            long sum = 0;
-            for(int j=0;j<n;j++)
+            long a = in.nextLong(),b = in.nextLong();
+            if(a==b)
             {
-                if(a[j]>i)
+                out.printLine("0");
+                continue;
+            }
+            else if(a<b)
+            {
+                long count = 0;
+                while(a*8<=b)
                 {
-                    sum = 0;
+                    count++;
+                    a*=8;
+                }
+                if(a==b)
+                {
+                    out.printLine(count);
                     continue;
                 }
-                sum+=a[j];
-                sum = Math.max(sum,0);
-                ans = Math.max(ans,sum-i);
+                while(a*4<=b)
+                {
+                    count++;
+                    a*=4;
+                }
+                if(a==b)
+                {
+                    out.printLine(count);
+                    continue;
+                }
+                while(a*2<=b)
+                {
+                    count++;
+                    a*=2;
+                }
+                if(a==b)
+                {
+                    out.printLine(count);
+                    continue;
+                }
+                else{
+                    out.printLine("-1");
+                    continue;
+                }
+            }
+            else{
+                if(a%2==1)
+                {
+                    out.printLine("-1");
+                    continue;
+                }
+                long count = 0;
+                while(a%8==0 && a/8>=b)
+                {
+                    count++;
+                    a/=8;
+                }
+                if(a==b)
+                {
+                    out.printLine(count);
+                    continue;
+                }
+                while(a%4==0 && a/4>=b)
+                {
+                    count++;
+                    a/=4;
+                }
+                if(a==b)
+                {
+                    out.printLine(count);
+                    continue;
+                }
+                while(a%2==0 && a/2>=b)
+                {
+                    count++;
+                    a/=2;
+                }
+                if(a==b)
+                {
+                    out.printLine(count);
+                    continue;
+                }
+                else{
+                    out.printLine("-1");
+                    continue;
+                }
             }
         }
-        out.printLine(ans);
         out.flush();
         out.close();
     }

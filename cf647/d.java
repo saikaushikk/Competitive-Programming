@@ -187,25 +187,69 @@ class Main{
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt();
-        int[] a = in.nextIntArray(n);
-        long ans = 0;
-        for(int i=1;i<=30;i++)
+        int n = in.nextInt(),m = in.nextInt();
+      //  out.printLine("asdasd");
+        List<List<Integer>> adj = new ArrayList<>();
+        for(int i=0;i<=n;i++)
         {
-            long sum = 0;
-            for(int j=0;j<n;j++)
+            adj.add(new ArrayList<>());
+        }
+        for(int i=0;i<m;i++)
+        {
+            int a = in.nextInt(),b =in.nextInt();
+            adj.get(a).add(b);
+            adj.get(b).add(a);
+        }
+        System.out.println(adj);
+        boolean[] atopic = new boolean[n+1];
+        int[] topics = new int[n+1];
+        Map<Integer,List<Integer>> topic = new HashMap<>();
+        for(int i=1;i<=n;i++)
+        {
+            int t = in.nextInt();
+            topics[i] = t;
+            if(!topic.containsKey(t))
+                topic.put(t,new ArrayList<>());
+            topic.get(t).add(i);
+        }
+        List<Integer> res = new ArrayList<>();
+      //  out.printLine(topic);
+        for(int i=1;i<=n;i++)
+        {
+            List<Integer> nodes = topic.get(i);
+            if(nodes==null)
+                continue;
+            for(int x:nodes)
             {
-                if(a[j]>i)
+                Set<Integer> set = new HashSet<>();
+                for(int nbr:adj.get(x))
                 {
-                    sum = 0;
-                    continue;
+                    if(atopic[nbr])
+                    {
+                        set.add(topics[nbr]);
+                    }   
                 }
-                sum+=a[j];
-                sum = Math.max(sum,0);
-                ans = Math.max(ans,sum-i);
+                System.out.println(set);
+                atopic[x] = true;
+                int cur = 1;
+                for(int xx:set)
+                {
+                    if(cur==xx)
+                        cur++;
+                }
+                if(cur!=topics[x])
+                {
+                    System.out.println("-1");
+                    return; 
+                }
+                //atopic[x] = i;
+                res.add(x);
             }
         }
-        out.printLine(ans);
+        for(int i:res)
+        {
+            out.print(i+" ");
+        }
         out.flush();
         out.close();
     }

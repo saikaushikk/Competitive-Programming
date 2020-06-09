@@ -187,25 +187,22 @@ class Main{
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt();
-        int[] a = in.nextIntArray(n);
-        long ans = 0;
-        for(int i=1;i<=30;i++)
+        int t = in.nextInt();
+        while(t-- >0)
         {
-            long sum = 0;
-            for(int j=0;j<n;j++)
+            String s = in.nextLine();
+            int res=0;
+            for(int i=0;i<s.length();)
             {
-                if(a[j]>i)
-                {
-                    sum = 0;
-                    continue;
+                if(i<s.length()-1 && ((s.charAt(i)=='x' && s.charAt(i+1)=='y') || (s.charAt(i)=='y' && s.charAt(i+1)=='x'))){
+                    res++;
+                    i+=2;
                 }
-                sum+=a[j];
-                sum = Math.max(sum,0);
-                ans = Math.max(ans,sum-i);
+                else
+                    i++;
             }
+            out.printLine(res);
         }
-        out.printLine(ans);
         out.flush();
         out.close();
     }

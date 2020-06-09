@@ -182,30 +182,63 @@ class Main{
         }
         return ans;
     }
+    static int mxn = (int)(1e9);
+    public static long dfs(long p,long q,long r,long a,long b,long c,int ops)
+    {
+        if(p==a && q==b && r==c)
+            return 0;
+        if(ops>3)
+        {
+            return mxn+1;
+        }
+        long res = Integer.MAX_VALUE;
+        for(int i=-10;i<=10;i++)
+        {
+            int temp = ops+1;
+            res = Math.min(res,1+dfs(p-i,q-i,r-i,a,b,c,temp));
+            res = Math.min(res,1+dfs(p+i,q+i,r+i,a,b,c,temp));
+            res = Math.min(res,1+dfs(p,q-i,r-i,a,b,c,temp));
+            res = Math.min(res,1+dfs(p,q+i,r+i,a,b,c,temp));
+            res = Math.min(res,1+dfs(p-i,q,r-i,a,b,c,temp));
+            res = Math.min(res,1+dfs(p+i,q,r+i,a,b,c,temp));
+            res = Math.min(res,1+dfs(p-i,q-i,r,a,b,c,temp));
+            res = Math.min(res,1+dfs(p+i,q+i,r,a,b,c,temp));
+            res = Math.min(res,1+dfs(p-i,q,r,a,b,c,temp));
+            res = Math.min(res,1+dfs(p+i,q,r,a,b,c,temp));
+            res = Math.min(res,1+dfs(p,q-i,r,a,b,c,temp));
+            res = Math.min(res,1+dfs(p,q+i,r,a,b,c,temp));
+            res = Math.min(res,1+dfs(p,q,r-i,a,b,c,temp));
+            res = Math.min(res,1+dfs(p,q,r+i,a,b,c,temp));
+            
 
+            res = Math.min(res,1+dfs(p*i,q*i,r*i,a,b,c,temp));
+          //  res = Math.min(res,1+dfs(p+i,q+i,r+i,temp));
+            res = Math.min(res,1+dfs(p,q*i,r*i,a,b,c,temp));
+          //  res = Math.min(res,1+dfs(p,q+i,r+i,temp));
+            res = Math.min(res,1+dfs(p*i,q,r*i,a,b,c,temp));
+           // res = Math.min(res,1+dfs(p+i,q,r+i,temp));
+            res = Math.min(res,1+dfs(p*i,q*i,r,a,b,c,temp));
+         //   res = Math.min(res,1+dfs(p+i,q+i,r,temp));
+            res = Math.min(res,1+dfs(p*i,q,r,a,b,c,temp));
+           // res = Math.min(res,1+dfs(p+i,q,r,temp));
+            res = Math.min(res,1+dfs(p,q*i,r,a,b,c,temp));
+          //  res = Math.min(res,1+dfs(p,q+i,r,temp));
+            res = Math.min(res,1+dfs(p,q,r*i,a,b,c,temp));
+          //  res = Math.min(res,1+dfs(p,q,r+i,temp));
+        }
+        return res;
+    }
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt();
-        int[] a = in.nextIntArray(n);
-        long ans = 0;
-        for(int i=1;i<=30;i++)
+        int t = in.nextInt();
+        while(t-- >0)
         {
-            long sum = 0;
-            for(int j=0;j<n;j++)
-            {
-                if(a[j]>i)
-                {
-                    sum = 0;
-                    continue;
-                }
-                sum+=a[j];
-                sum = Math.max(sum,0);
-                ans = Math.max(ans,sum-i);
-            }
+            long p = in.nextLong(),q = in.nextLong(),r = in.nextLong();
+            long a = in.nextLong(),b = in.nextLong(),c = in.nextLong();
+            out.printLine(dfs(p, q, r, a, b, c, 0));
         }
-        out.printLine(ans);
         out.flush();
         out.close();
     }

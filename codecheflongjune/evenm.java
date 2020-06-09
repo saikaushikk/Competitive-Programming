@@ -187,25 +187,53 @@ class Main{
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt();
-        int[] a = in.nextIntArray(n);
-        long ans = 0;
-        for(int i=1;i<=30;i++)
+        int t = in.nextInt();
+        while(t-- >0)
         {
-            long sum = 0;
-            for(int j=0;j<n;j++)
-            {
-                if(a[j]>i)
+            int n = in.nextInt();
+            if(n%2==1){
+                StringBuilder sb = new StringBuilder();
+                for(int i=1;i<=Math.pow(n,2);i++)
                 {
-                    sum = 0;
-                    continue;
+                    sb.append(i + " ");
+                    if(i%n==0)
+                    {
+                        sb.append("\n");
+                    }
                 }
-                sum+=a[j];
-                sum = Math.max(sum,0);
-                ans = Math.max(ans,sum-i);
+                out.print(sb);
+            }
+            else{
+                int[][] mat = new int[n][n];
+                int count = 1;
+                for(int i=0;i<n;i++)
+                {
+                    if(i%2==1)
+                    {  
+                        for(int j=n-1;j>=0;j--)
+                        {
+                            mat[i][j] = count;
+                            count++;
+                        }
+                    }
+                    else{
+                        for(int j=0;j<n;j++)
+                        {
+                            mat[i][j] = count;
+                            count++;
+                        }
+                    }
+                }
+                for(int i=0;i<n;i++)
+                {
+                    for(int j=0;j<n;j++)
+                    {
+                        out.print(mat[i][j] + " ");
+                    }
+                    out.printLine();
+                }
             }
         }
-        out.printLine(ans);
         out.flush();
         out.close();
     }

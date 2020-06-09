@@ -188,24 +188,28 @@ class Main{
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
         int n = in.nextInt();
-        int[] a = in.nextIntArray(n);
-        long ans = 0;
-        for(int i=1;i<=30;i++)
+        long[] arr = new long[n];
+        for(int i=0;i<n;i++)
+            arr[i] = in.nextLong();
+        long res = 0;
+        if(n<=2)
         {
-            long sum = 0;
-            for(int j=0;j<n;j++)
+            for(int i=0;i<n;i++)
+                res|=arr[i];
+            System.out.println(res);
+            return;
+        }
+        for(int i=0;i<n;i++)
+        {
+            for(int j=i+1;j<n;j++)
             {
-                if(a[j]>i)
+                for(int k=j+1;k<n;k++)
                 {
-                    sum = 0;
-                    continue;
+                    res = Math.max(res,arr[i]|arr[j]|arr[k]);
                 }
-                sum+=a[j];
-                sum = Math.max(sum,0);
-                ans = Math.max(ans,sum-i);
             }
         }
-        out.printLine(ans);
+        out.printLine(res);
         out.flush();
         out.close();
     }

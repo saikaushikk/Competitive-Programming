@@ -187,25 +187,37 @@ class Main{
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt();
-        int[] a = in.nextIntArray(n);
-        long ans = 0;
-        for(int i=1;i<=30;i++)
+        int t = in.nextInt();
+        while(t-- >0)
         {
-            long sum = 0;
-            for(int j=0;j<n;j++)
+            int n = in.nextInt(),x = in.nextInt();
+            int[] arr = in.nextIntArray(n);
+            int odd = 0, even = 0;
+            for(int i:arr)
             {
-                if(a[j]>i)
+                if(i%2==0)
+                    even++;
+                else
+                    odd++;
+            }  
+            boolean flag = false;
+            for(int i=0;i<=x;i++)
+            {
+                int o = x - i;
+                if(o%2==1 && o<=odd && i<=even)
                 {
-                    sum = 0;
-                    continue;
+                    flag  = true;
+                    break;
                 }
-                sum+=a[j];
-                sum = Math.max(sum,0);
-                ans = Math.max(ans,sum-i);
+            }
+            if(flag)
+            {
+                out.printLine("YES");
+            }
+            else{
+                out.printLine("NO");
             }
         }
-        out.printLine(ans);
         out.flush();
         out.close();
     }

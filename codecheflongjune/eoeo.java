@@ -168,16 +168,15 @@ class Main{
             return b; 
         return gcd(b % a, a); 
     } 
-    static int mod = (int)(1e9+7);
     public static long pow(long a,long b)
     {
         long ans = 1;
         while(b> 0)
         {
             if((b & 1)==1){
-                ans = (ans*a) % mod; 
+                ans = (ans*a); 
             }
-            a = (a*a) % mod;
+            a = (a*a);
             b = b>>1;
         }
         return ans;
@@ -187,25 +186,35 @@ class Main{
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt();
-        int[] a = in.nextIntArray(n);
-        long ans = 0;
-        for(int i=1;i<=30;i++)
+        int t = in.nextInt();
+        while(t-- >0)
         {
-            long sum = 0;
-            for(int j=0;j<n;j++)
+            long ts = in.nextLong();
+            if(ts%2==1)
             {
-                if(a[j]>i)
+                out.printLine(ts/2);
+            }
+            else{
+                double log = (Math.log((double)ts)/Math.log(2.0));
+                if(log%2==0)
                 {
-                    sum = 0;
-                    continue;
+                    out.printLine("0");
                 }
-                sum+=a[j];
-                sum = Math.max(sum,0);
-                ans = Math.max(ans,sum-i);
+                else
+                {
+                    long count = 0;
+                    long temp = ts;
+                    while(temp%2==0)
+                    {
+                        temp/=2;
+                        count++;
+                    }
+                  //  out.printLine(count);
+                    count = pow(2,count+1);
+                    out.printLine(ts/count);
+                }
             }
         }
-        out.printLine(ans);
         out.flush();
         out.close();
     }

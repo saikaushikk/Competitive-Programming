@@ -187,25 +187,33 @@ class Main{
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt();
-        int[] a = in.nextIntArray(n);
-        long ans = 0;
-        for(int i=1;i<=30;i++)
+        int t = in.nextInt();
+        while(t-- >0)
         {
-            long sum = 0;
-            for(int j=0;j<n;j++)
+            int n = in.nextInt();
+            int[] arr = in.nextIntArray(n);
+            TreeSet<Integer> set = new TreeSet<>();
+            for(int i:arr)
             {
-                if(a[j]>i)
-                {
-                    sum = 0;
-                    continue;
-                }
-                sum+=a[j];
-                sum = Math.max(sum,0);
-                ans = Math.max(ans,sum-i);
+                set.add(i);
             }
+            //boolean flag = false;
+            int ans = -1;
+            for(int i=1;i<=1024;i++)
+            {
+                TreeSet<Integer> temp = new TreeSet<>();
+                for(int x:arr)
+                {
+                    temp.add(x^i);
+                }
+                if(temp.equals(set))
+                {
+                    ans = i;
+                    break;
+                }
+            }
+            out.printLine(ans);
         }
-        out.printLine(ans);
         out.flush();
         out.close();
     }

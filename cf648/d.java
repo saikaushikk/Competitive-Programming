@@ -182,30 +182,89 @@ class Main{
         }
         return ans;
     }
-
+    static int[][] DIR = {{0,1},{1,0},{-1,0},{0,-1}};
+    static int n,m;
+    public static boolean isValid(int i,int j)
+    {
+        if(i<0 || j<0 || i>=n || j>=m)
+            return false;
+        return true;
+    }
+    public static void bfs(char[][] grid,int i,int j,boolean[][] visited)
+    {
+        if(!isValid(i,j) || visited[i][j] || grid[i][j]=='#' || grid[i][j]=='B')
+            return;
+        visited[i][j] = true;
+        for(int k=0;k<4;k++)
+        {
+            bfs(grid,i+DIR[k][0],j+DIR[k][1],visited);
+        }
+    }
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt();
-        int[] a = in.nextIntArray(n);
-        long ans = 0;
-        for(int i=1;i<=30;i++)
+        int t = in.nextInt();
+        while(t-- >0)
         {
-            long sum = 0;
-            for(int j=0;j<n;j++)
+            n = in.nextInt();
+            m = in.nextInt();
+            char[][] grid = new char[n][m];
+            for(int i=0;i<n;i++)
             {
-                if(a[j]>i)
+                grid[i] = in.nextLine().toCharArray();
+            }
+            boolean flag = true;
+            for(int i=0;i<n;i++)
+            {
+                for(int j=0;j<m;j++)
                 {
-                    sum = 0;
-                    continue;
+                    if(grid[i][j]=='B')
+                    {
+                        for(int k=0;k<4;k++)
+                        {
+                            int x = i+DIR[k][0],y = j+DIR[k][1];
+                            if(isValid(x,y))
+                            {
+                                if(grid[x][y]=='G')
+                                    flag = false;
+                                else if(grid[x][y]=='.')
+                                    grid[x][y] = '#';
+                            }
+                        }
+                    }
                 }
-                sum+=a[j];
-                sum = Math.max(sum,0);
-                ans = Math.max(ans,sum-i);
+            }
+            if(!flag)
+            {
+                out.printLine("No");
+                continue;
+            }
+            boolean[][] visited = new boolean[n][m];
+            bfs(grid,n-1,m-1,visited);
+            for(int i=0;i<n;i++)
+            {
+                for(int j=0;j<m;j++)
+                {
+                    if(grid[i][j]=='G' && !visited[i][j])
+                    {
+                        flag = false;
+                        break;
+                    }
+                }
+                if(!flag)
+                {
+                    break;
+                }
+            }
+            if(flag)
+            {
+                out.printLine("Yes");
+            }
+            else{
+                out.printLine("No");
             }
         }
-        out.printLine(ans);
         out.flush();
         out.close();
     }

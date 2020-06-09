@@ -187,25 +187,40 @@ class Main{
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt();
-        int[] a = in.nextIntArray(n);
-        long ans = 0;
-        for(int i=1;i<=30;i++)
+        int t = in.nextInt();
+        while(t-- >0)
         {
-            long sum = 0;
-            for(int j=0;j<n;j++)
+            char[] s = in.nextLine().toCharArray();
+            int res = Integer.MAX_VALUE;
+            int n = s.length;
+            int[] preOne = new int[n+1];
+            int[] sufOne = new int[n+1];
+            int[] preZ = new int[n+1];
+            int[] sufZ = new int[n+1];
+            for(int i=1;i<=n;i++)
             {
-                if(a[j]>i)
-                {
-                    sum = 0;
-                    continue;
-                }
-                sum+=a[j];
-                sum = Math.max(sum,0);
-                ans = Math.max(ans,sum-i);
+                preOne[i] = preOne[i-1]+(s[i-1]=='1'?1:0);
+                preZ[i] = preZ[i-1]+(s[i-1]=='0'?1:0);
             }
+            for(int i=n-1;i>=0;i--)
+            {
+                sufOne[i] = sufOne[i+1]+(s[i]=='1'?1:0);
+                sufZ[i] = sufZ[i+1]+(s[i]=='0'?1:0);
+            }
+            res = Math.min(preOne[n],preZ[n]);
+            // System.out.println(Arrays.toString(preOne));
+            // System.out.println(Arrays.toString(sufOne));
+            // System.out.println(Arrays.toString(preZ));
+            // System.out.println(Arrays.toString(sufZ));
+            for(int i=0;i<n;i++)
+            {
+                //111..000..
+                res = Math.min(res,preZ[i]+sufOne[i+1]);
+                //000...1111
+                res= Math.min(res,preOne[i]+sufZ[i+1]);
+            }
+            out.printLine(res);
         }
-        out.printLine(ans);
         out.flush();
         out.close();
     }

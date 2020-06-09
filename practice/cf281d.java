@@ -188,24 +188,15 @@ class Main{
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
         int n = in.nextInt();
-        int[] a = in.nextIntArray(n);
-        long ans = 0;
-        for(int i=1;i<=30;i++)
+        if((n&1)==1)
         {
-            long sum = 0;
-            for(int j=0;j<n;j++)
-            {
-                if(a[j]>i)
-                {
-                    sum = 0;
-                    continue;
-                }
-                sum+=a[j];
-                sum = Math.max(sum,0);
-                ans = Math.max(ans,sum-i);
-            }
+            out.printLine("black");
         }
-        out.printLine(ans);
+        else
+        {
+            out.printLine("white");
+            out.printLine("1 2");
+        }
         out.flush();
         out.close();
     }
