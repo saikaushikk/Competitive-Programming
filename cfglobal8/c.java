@@ -187,20 +187,20 @@ class Main{
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        long n=in.nextLong(),m = in.nextLong(),k = in.nextLong();
-        long l = 1,r = n*m;
-        while(l<r)
+        int n = in.nextInt();
+        out.printLine(4 + 3*n);
+        out.printLine("0 0");
+        out.printLine("0 1");
+        int k = 0;
+        for(int i=1;i<=n;i++)
         {
-            long mid = l+(r-l)/2;
-            long temp = 0;
-            for(int i=1;i<=n;i++)
-                temp+=Math.min(m,mid/i);
-            if(temp<k)
-                l = mid+1;
-            else
-                r = mid;
+            out.printLine(i + " " + k);
+            out.printLine(i + " " + (k+1));
+            out.printLine(i + " " + (k+2));
+            k++;
         }
-        out.printLine(l);
+        out.printLine((n+1) + " " + (k));
+        out.printLine((n+1) + " " + (k+1));
         out.flush();
         out.close();
     }

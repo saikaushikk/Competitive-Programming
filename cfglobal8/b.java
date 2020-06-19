@@ -162,22 +162,15 @@ class Main{
         }
 
     }
-    static int gcd(int a, int b) 
-    { 
-        if (a == 0) 
-            return b; 
-        return gcd(b % a, a); 
-    } 
-    static int mod = (int)(1e9+7);
     public static long pow(long a,long b)
     {
         long ans = 1;
         while(b> 0)
         {
             if((b & 1)==1){
-                ans = (ans*a) % mod; 
+                ans = (ans*a);
             }
-            a = (a*a) % mod;
+            a = (a*a);
             b = b>>1;
         }
         return ans;
@@ -187,20 +180,28 @@ class Main{
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        long n=in.nextLong(),m = in.nextLong(),k = in.nextLong();
-        long l = 1,r = n*m;
-        while(l<r)
+        long k = in.nextLong();
+        long p =1;
+        int[] arr = {1,1,1,1,1,1,1,1,1,1};
+        int i = 0;
+        while(p<k)
         {
-            long mid = l+(r-l)/2;
-            long temp = 0;
-            for(int i=1;i<=n;i++)
-                temp+=Math.min(m,mid/i);
-            if(temp<k)
-                l = mid+1;
-            else
-                r = mid;
+            arr[i]++;
+            p = 1;
+            for(int j=0;j<10;j++)
+                p=p*arr[j];
+            i = (i+1)%10;
         }
-        out.printLine(l);
+   //    out.printLine(Arrays.toString(arr));
+        StringBuilder sb = new StringBuilder();
+        String temp = "codeforces";
+        char[] arr1 = temp.toCharArray();
+        for(i=0;i<10;i++)
+        {
+            for(int j=0;j<arr[i];j++)
+                sb.append(arr1[i]);
+        }
+        out.printLine(sb);
         out.flush();
         out.close();
     }

@@ -182,25 +182,29 @@ class Main{
         }
         return ans;
     }
-
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        long n=in.nextLong(),m = in.nextLong(),k = in.nextLong();
-        long l = 1,r = n*m;
-        while(l<r)
+        int t = in.nextInt();
+        while(t-- >0)
         {
-            long mid = l+(r-l)/2;
-            long temp = 0;
-            for(int i=1;i<=n;i++)
-                temp+=Math.min(m,mid/i);
-            if(temp<k)
-                l = mid+1;
-            else
-                r = mid;
+            int n = in.nextInt();
+            int[] arr = in.nextIntArray(n);
+            StringBuilder sb = new StringBuilder();
+            sb.append(arr[0] + " ");
+            int count = 1;
+            for(int i=1;i<n-1;i++)
+            {
+                if((arr[i]>arr[i+1] && arr[i-1]<arr[i])||(arr[i]<arr[i+1] && arr[i]<arr[i-1])){
+                    sb.append(arr[i] + " ");
+                    count++;
+                }
+            }
+            sb.append(arr[n-1]);
+            out.printLine(count+1);
+            out.printLine(sb);
         }
-        out.printLine(l);
         out.flush();
         out.close();
     }

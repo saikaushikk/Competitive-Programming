@@ -169,6 +169,8 @@ class Main{
         return gcd(b % a, a); 
     } 
     static int mod = (int)(1e9+7);
+    static InputReader in = new InputReader(System.in);
+    static OutputWriter out = new OutputWriter(System.out);
     public static long pow(long a,long b)
     {
         long ans = 1;
@@ -182,26 +184,53 @@ class Main{
         }
         return ans;
     }
-
-    public static void main(String[] args) {
-        InputReader in = new InputReader(System.in);
-        OutputWriter out = new OutputWriter(System.out);
-        //IOUtils io = new IOUtils();
-        long n=in.nextLong(),m = in.nextLong(),k = in.nextLong();
-        long l = 1,r = n*m;
-        while(l<r)
-        {
-            long mid = l+(r-l)/2;
-            long temp = 0;
-            for(int i=1;i<=n;i++)
-                temp+=Math.min(m,mid/i);
-            if(temp<k)
-                l = mid+1;
-            else
-                r = mid;
-        }
-        out.printLine(l);
+    // static long res = -1;
+    public static void recurse(long l,long h,boolean truth)
+    {
+        if(l>=h)
+            return;
+        long mid = l + (h-l)/2;
+        out.printLine(mid + " " + l + " " + h);
         out.flush();
-        out.close();
+        String res = in.nextLine();
+        if(res.equals("E"))
+        {
+            System.exit(0);
+        }
+        if(truth)
+        {
+            //lie or truth
+            //lie
+            if(res.equals("G"))
+            {
+                recurse(mid+1,h,true);
+                recurse(l,mid-1,false);
+            }
+            else
+            {
+                recurse(l,mid-1,true);
+                recurse(mid+1,h,false);
+            }
+        }
+        else
+        {
+            //truth
+            if(res.equals("G"))
+            {
+                recurse(mid+1,h,true);
+            }
+            else
+            {
+                recurse(l,mid-1,true);
+            }
+        }
+    }
+    public static void main(String[] args) {
+        
+        //IOUtils io = new IOUtils();
+        long n = in.nextLong();
+        recurse(1,n,true);
+        // out.flush();
+        // out.close();
     }
 }

@@ -182,25 +182,33 @@ class Main{
         }
         return ans;
     }
-
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        long n=in.nextLong(),m = in.nextLong(),k = in.nextLong();
-        long l = 1,r = n*m;
-        while(l<r)
+        char[] s = in.nextLine().toCharArray();
+        int n = s.length;
+        long odd = 0,even = 0;
+        int[] ecount = new int[2];
+        int[] ocount = new int[2];
+        for(int i=0;i<n;i++)
         {
-            long mid = l+(r-l)/2;
-            long temp = 0;
-            for(int i=1;i<=n;i++)
-                temp+=Math.min(m,mid/i);
-            if(temp<k)
-                l = mid+1;
+            odd++;
+            int id = s[i]-'a';
+            if((i%2)==0)
+            {
+                odd+=ecount[id];
+                even+=ocount[id];
+                ecount[id]++;
+            }
             else
-                r = mid;
+            {
+                odd+=ocount[id];
+                even+=ecount[id];
+                ocount[id]++;
+            }
         }
-        out.printLine(l);
+        out.printLine(even + " " + odd);
         out.flush();
         out.close();
     }

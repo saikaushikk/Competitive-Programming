@@ -182,25 +182,50 @@ class Main{
         }
         return ans;
     }
-
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        long n=in.nextLong(),m = in.nextLong(),k = in.nextLong();
-        long l = 1,r = n*m;
-        while(l<r)
+        int t = in.nextInt();
+        while(t-- >0)
         {
-            long mid = l+(r-l)/2;
-            long temp = 0;
-            for(int i=1;i<=n;i++)
-                temp+=Math.min(m,mid/i);
-            if(temp<k)
-                l = mid+1;
-            else
-                r = mid;
+            int n = in.nextInt();
+            int m = in.nextInt();
+            int[][] arr = new int[n][m];
+            for(int i=0;i<n;i++)
+                arr[i] = in.nextIntArray(m);
+            Map<Integer,Integer> ones = new HashMap<>();
+            Map<Integer,Integer> zeros = new HashMap<>();
+            int total = (n-1) + (m-1);
+            int half = total/2;
+            for(int i=0;i<n;i++)
+            {
+                for(int j=0;j<m;j++)
+                {
+                    int dist = i+j;
+                    if(dist>half)
+                    {
+                        dist = total - dist;
+                    }
+                    if(arr[i][j]==0)
+                    {
+                        zeros.put(dist,zeros.getOrDefault(dist, 0)+1);
+                    }
+                    else{
+                        ones.put(dist,ones.getOrDefault(dist, 0)+1);
+                    }
+                }
+               
+            }
+            int res = 0;
+            for(int i=0;i<(total+1)/2;i++)
+            {
+                int o = ones.getOrDefault(i, 0);
+                int z = zeros.getOrDefault(i, 0);
+                res+=Math.min(o,z);
+            }
+            out.printLine(res);
         }
-        out.printLine(l);
         out.flush();
         out.close();
     }

@@ -182,25 +182,48 @@ class Main{
         }
         return ans;
     }
-
+    public static boolean isDivisor(String s,String p)
+    {
+        for(int i=0;i+p.length()<=s.length();i+=p.length())
+        {
+            if(!s.substring(i,i+p.length()).equals(p))
+                return false;
+        }
+        return true;
+    }
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        long n=in.nextLong(),m = in.nextLong(),k = in.nextLong();
-        long l = 1,r = n*m;
-        while(l<r)
+        String s = in.nextLine();
+        String t = in.nextLine();
+        if(s.length()>t.length())
         {
-            long mid = l+(r-l)/2;
-            long temp = 0;
-            for(int i=1;i<=n;i++)
-                temp+=Math.min(m,mid/i);
-            if(temp<k)
-                l = mid+1;
-            else
-                r = mid;
+            String temp = s;
+            s = t;
+            t = temp;
         }
-        out.printLine(l);
+        Set<String> set = new HashSet<>();
+        set.add(s);
+        for(int l=1;l<=s.length()/2;l++)
+        {
+            if(s.length()%l!=0)
+                continue;
+            String cur = s.substring(0,l);
+            if(isDivisor(s,cur))
+            {
+                set.add(cur);
+            }
+        }
+        int res = 0;
+        for(String cur:set)
+        {
+            if(t.length()%cur.length()!=0)
+                continue;
+            if(isDivisor(t,cur))
+                res++;
+        }
+        out.printLine(res);
         out.flush();
         out.close();
     }

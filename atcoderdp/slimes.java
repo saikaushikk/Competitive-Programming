@@ -182,25 +182,32 @@ class Main{
         }
         return ans;
     }
-
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        long n=in.nextLong(),m = in.nextLong(),k = in.nextLong();
-        long l = 1,r = n*m;
-        while(l<r)
+        int n = in.nextInt();
+        int[] arr = in.nextIntArray(n);
+        Long[][] dp = new Long[n][n];
+        for(int l = n-1;l>=0;l--)
         {
-            long mid = l+(r-l)/2;
-            long temp = 0;
-            for(int i=1;i<=n;i++)
-                temp+=Math.min(m,mid/i);
-            if(temp<k)
-                l = mid+1;
-            else
-                r = mid;
+            for(int r = l;r<n;r++)
+            {
+                if(l==r)
+                    dp[l][r] = 0L;
+                else{
+                    dp[l][r] = Long.MAX_VALUE;
+                    long sum = 0;
+                    for(int i=l;i<=r;i++)
+                        sum+=arr[i];
+                    for(int k=l;k<r;k++)
+                    {
+                        dp[l][r] = Math.min(dp[l][r],dp[l][k]+dp[k+1][r]+sum);
+                    }
+                }
+            }
         }
-        out.printLine(l);
+        out.printLine(dp[0][n-1]);
         out.flush();
         out.close();
     }

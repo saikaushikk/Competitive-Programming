@@ -1,6 +1,6 @@
 import java.util.*;
 import java.io.*;
-class Main{
+ class Main{
     static class InputReader {
 
         private final InputStream stream;
@@ -182,25 +182,68 @@ class Main{
         }
         return ans;
     }
-
+    public static List<int[]> merge(List<int[]> intervals) {
+        if (intervals.size() <= 1)
+            return intervals;        
+        List<int[]> result = new ArrayList<int[]>();
+        int start = intervals.get(0)[0];
+        int end = intervals.get(0)[1];
+        Collections.sort(intervals,(a,b)->((a[0]==b[0])?a[1]-b[1]:a[0]-b[0]));
+        for (int[] interval : intervals) {
+            if (interval[0] <= end) // Overlapping intervals, move the end if needed
+                end = Math.max(end, interval[1]);
+            else {                     // Disjoint intervals, add the previous one and reset bounds
+                result.add(new int[]{start, end});
+                start = interval[0];
+                end = interval[1];
+            }
+        }
+        
+        // Add the last interval
+        result.add(new int[]{start, end});
+        return result;
+    }
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        long n=in.nextLong(),m = in.nextLong(),k = in.nextLong();
-        long l = 1,r = n*m;
-        while(l<r)
+        int t = in.nextInt();
+        while(t-- >0)
         {
-            long mid = l+(r-l)/2;
-            long temp = 0;
-            for(int i=1;i<=n;i++)
-                temp+=Math.min(m,mid/i);
-            if(temp<k)
-                l = mid+1;
-            else
-                r = mid;
+            int n = in.nextInt(),k = in.nextInt();
+            char[] arr = in.nextLine().toCharArray();
+            List<int[]> inter = new ArrayList<>();
+            for(int i=0;i<n;i++)
+            {
+                if(arr[i]=='1')
+                {
+                    inter.add(new int[]{Math.max(0,i-k),i});
+                    inter.add(new int[]{i,Math.min(i+k,n-1)});
+                }
+            }
+            long res = 0,count = 0;
+            List<int[]> temp = merge(inter);
+            int i = 0;
+            for(int[] tt:temp){
+            //  out.printLine(Arrays.toString(tt));
+                count = 0;
+                for(int x = i;x<tt[0];x++)
+                    if(arr[x]=='0')
+                        count++;
+               // out.printLine(count + " " + i);
+                res+=((count/(k+1))+((count%(k+1))>0?1:0));
+                i = tt[1]+1;
+            }
+            count = 0;
+            if(i<n)
+            {
+                for(int x = i;x<n;x++)
+                    if(arr[x]=='0')
+                        count++;
+            }
+            res+=((count/(k+1))+((count%(k+1)>0)?1:0));
+            out.printLine(res);
         }
-        out.printLine(l);
         out.flush();
         out.close();
     }

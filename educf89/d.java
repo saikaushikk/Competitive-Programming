@@ -182,25 +182,52 @@ class Main{
         }
         return ans;
     }
-
+    static int mxn = (int)(1e7);
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        long n=in.nextLong(),m = in.nextLong(),k = in.nextLong();
-        long l = 1,r = n*m;
-        while(l<r)
+        int[] sieve = new int[mxn+1];
+        Arrays.fill(sieve,-1);
+        for(int i=2;i*i<sieve.length;i++)
         {
-            long mid = l+(r-l)/2;
-            long temp = 0;
-            for(int i=1;i<=n;i++)
-                temp+=Math.min(m,mid/i);
-            if(temp<k)
-                l = mid+1;
-            else
-                r = mid;
+            if(sieve[i]==-1)
+            {
+                for(int j=i*i;j<sieve.length;j+=i)
+                {
+                    if(sieve[j]==-1)
+                        sieve[j]= i; 
+                }
+            }
         }
-        out.printLine(l);
+        for(int i=1;i<sieve.length;i++)
+        {
+            if(sieve[i]==-1)
+                sieve[i] = i;
+        }
+        int n = in.nextInt();
+        // int[] arr = new int[n];
+        StringBuilder sb1 = new StringBuilder();
+        StringBuilder sb2 = new StringBuilder();
+        for(int i=0;i<n;i++)
+        {
+            int cur = in.nextInt();
+            int prime = sieve[cur];
+            int temp = cur;
+            while(temp%prime==0)
+                temp/=prime;
+            if(temp!=1)
+            {
+                sb1.append(temp + " ");
+                sb2.append(prime + " ");
+            }
+            else{
+                sb1.append("-1" + " ");
+                sb2.append("-1" + " "); 
+            }
+        }
+        out.printLine(sb1);
+        out.printLine(sb2);
         out.flush();
         out.close();
     }
