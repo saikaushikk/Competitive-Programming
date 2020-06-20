@@ -1,6 +1,6 @@
 import java.util.*;
 import java.io.*;
-public class Main{
+class Main{
     static class InputReader {
 
         private final InputStream stream;
@@ -187,39 +187,17 @@ public class Main{
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int t = 1;
+        int t = in.nextInt();
         while(t-- >0)
         {
             int n = in.nextInt();
-            int[] bit = new int[20];
-            for(int i=0;i<n;i++)
+            int res = -1;
+            for(int i=1;i<=n;i++)
             {
-                long x = in.nextLong();
-                for(int j=0;j<20;j++)
-                {
-                   // out.printLine(x + " " + (1<<j) + " " + (x&(1<<j)));
-                    if((x&(1<<j))!=0)
-                    {
-                        bit[j]++;
-                    }
-                }
-            }
-            // out.printLine(Arrays.toString(bit));
-            // out.printLine(Integer.toBinaryString(129));
-            long res = 0;
-            for(int i=0;i<n;i++)
-            {
-                long x = 0;
-                for(int j=0;j<20;j++)
-                {
-                    if(bit[j]>0)
-                    {
-                        x^=(1<<j);
-                        bit[j]--;
-                    }
-                }
-              //  out.print(x);
-                res = res + (x*x);
+                if(2*i>n)
+                    break;
+                else
+                    res = i;
             }
             out.printLine(res);
         }

@@ -1,6 +1,9 @@
 import java.util.*;
+
+import javax.print.attribute.ResolutionSyntax;
+
 import java.io.*;
-public class Main{
+class Main{
     static class InputReader {
 
         private final InputStream stream;
@@ -182,46 +185,69 @@ public class Main{
         }
         return ans;
     }
-
+    static List<Integer> getDivisors(int n) 
+    { 
+        // Note that this loop runs till square root 
+        List<Integer> res = new ArrayList<>();
+        for (int i=1; i<=Math.sqrt(n); i++) 
+        { 
+            if (n%i==0) 
+            { 
+                // If divisors are equal, print only one 
+                if (n/i == i) 
+                    res.add(i);
+       
+                else // Otherwise print both 
+                    res.add(i);
+                    res.add(n/i);
+            } 
+        } 
+        return res;
+    } 
+    public static boolean isValid(int n,boolean turn)
+    {
+        //System.out.println(n + " " + (turn?"Ashish":"Fastest"));
+        if(n==2)
+            return true;
+        List<Integer> cur = getDivisors(n);
+        for(int k:cur)
+        {
+            if(k%2==1 && ((n/k)%2==0) && k>1)
+            {
+                if(!isValid(n/k,!turn))
+                    return true;
+            }
+        }
+        return false;
+    }
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int t = 1;
+        int t = in.nextInt();
         while(t-- >0)
         {
             int n = in.nextInt();
-            int[] bit = new int[20];
-            for(int i=0;i<n;i++)
+            if(n==1)
             {
-                long x = in.nextLong();
-                for(int j=0;j<20;j++)
+                out.printLine("FastestFinger");
+                continue;
+            }
+            if(n%2==1)
+            {
+                out.printLine("Ashishgup");
+                continue;
+            }
+            else
+            {
+                if(isValid(n,true))
                 {
-                   // out.printLine(x + " " + (1<<j) + " " + (x&(1<<j)));
-                    if((x&(1<<j))!=0)
-                    {
-                        bit[j]++;
-                    }
+                    out.printLine("Ashishgup");
+                }
+                else{
+                    out.printLine("FastestFinger");
                 }
             }
-            // out.printLine(Arrays.toString(bit));
-            // out.printLine(Integer.toBinaryString(129));
-            long res = 0;
-            for(int i=0;i<n;i++)
-            {
-                long x = 0;
-                for(int j=0;j<20;j++)
-                {
-                    if(bit[j]>0)
-                    {
-                        x^=(1<<j);
-                        bit[j]--;
-                    }
-                }
-              //  out.print(x);
-                res = res + (x*x);
-            }
-            out.printLine(res);
         }
         out.flush();
         out.close();

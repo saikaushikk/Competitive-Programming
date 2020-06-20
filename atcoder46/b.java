@@ -1,6 +1,6 @@
 import java.util.*;
 import java.io.*;
-public class Main{
+class Main{
     static class InputReader {
 
         private final InputStream stream;
@@ -168,7 +168,7 @@ public class Main{
             return b; 
         return gcd(b % a, a); 
     } 
-    static int mod = (int)(1e9+7);
+    static int mod = 998244353;
     public static long pow(long a,long b)
     {
         long ans = 1;
@@ -182,47 +182,31 @@ public class Main{
         }
         return ans;
     }
-
+    static Long[][] dp;
+    public static long dfs(int a,int b,int c,int d)
+    {
+        if(a==c && b==d)
+            return 1;
+        if(dp[a][b]!=null)
+            return dp[a][b];
+        long res = 0;
+        if(a<c)
+            res=(res+((dfs(a+1,b,c,d)*b)%mod))%mod;
+        if(b<d)
+            res=(res+(dfs(a,b+1,c,d)*a)%mod)%mod;
+        if(a<c && b<d)
+        {
+            res=(res+mod-(dfs(a+1,b+1,c,d)*a*b)%mod)%mod;
+        }
+        return dp[a][b] = res;
+    }
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int t = 1;
-        while(t-- >0)
-        {
-            int n = in.nextInt();
-            int[] bit = new int[20];
-            for(int i=0;i<n;i++)
-            {
-                long x = in.nextLong();
-                for(int j=0;j<20;j++)
-                {
-                   // out.printLine(x + " " + (1<<j) + " " + (x&(1<<j)));
-                    if((x&(1<<j))!=0)
-                    {
-                        bit[j]++;
-                    }
-                }
-            }
-            // out.printLine(Arrays.toString(bit));
-            // out.printLine(Integer.toBinaryString(129));
-            long res = 0;
-            for(int i=0;i<n;i++)
-            {
-                long x = 0;
-                for(int j=0;j<20;j++)
-                {
-                    if(bit[j]>0)
-                    {
-                        x^=(1<<j);
-                        bit[j]--;
-                    }
-                }
-              //  out.print(x);
-                res = res + (x*x);
-            }
-            out.printLine(res);
-        }
+        int a = in.nextInt(),b = in.nextInt(),c = in.nextInt(),d = in.nextInt();
+        dp = new Long[c+1][d+1];
+        out.printLine(dfs(a,b,c,d));
         out.flush();
         out.close();
     }
