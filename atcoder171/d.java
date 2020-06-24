@@ -168,38 +168,79 @@ class Main{
             return b; 
         return gcd(b % a, a); 
     } 
-    
-    public static int lis(List<Integer> list)
+    static int mod = (int)(1e9+7);
+    public static long pow(long a,long b)
     {
-        int[] dp = new int[list.size()];
-        int len = 0;
-        for (int num : list) {
-            int i = Arrays.binarySearch(dp, 0, len, num);
-            if (i < 0) {
-                i = -(i + 1);
+        long ans = 1;
+        while(b> 0)
+        {
+            if((b & 1)==1){
+                ans = (ans*a) % mod; 
             }
-            dp[i] = num;
-            if (i == len) {
-                len++;
-            }
+            a = (a*a) % mod;
+            b = b>>1;
         }
-        return len;
+        return ans;
+    }  
+    public static void update(int i,long add,long[] BIT,int n)
+    {
+        i = i+1;
+        while(i<=n)
+        {
+            BIT[i]+=add;
+            i = i+(i&(-i));
+        }
     }
+    public static long sum(int i,long[] BIT)
+    {
+        long sum = 0;
+        i = i+1;
+        while(i>0)
+        {
+            sum+=BIT[i];
+            i = i - (i&(-i));
+        }
+        return sum;
+    }
+
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int t = in.nextInt();
-        while(t-- >0)
+        int n = in.nextInt();
+        long[] BIT = new long[100005];
+        Map<Long,List<Integer>> map = new HashMap<>();
+        for(int i=0;i<n;i++)
         {
-            int n = in.nextInt(),m = in.nextInt();
-            int[] arr = in.nextIntArray(n);
-            List<Integer> list = new ArrayList<>();
-            for(int i:arr)
-                if(i!=m)
-                    list.add(i);
-            out.printLine(lis(list));
+            long x = in.nextLong();
+            update(i,x,BIT,n);
+            if(!map.containsKey(x))
+                map.put(x,new ArrayList<>());
+            map.get(x).add(i);
         }
+        int q = in.nextInt();
+        for(int i=0;i<q;i++)
+        {
+          //  System.out.println(map);
+            long u = in.nextLong(),v = in.nextLong();
+            if(!map.containsKey(u))
+            {
+                out.printLine(sum(n,BIT));
+            }
+            else{
+                List<Integer> cur = map.get(u);
+                for(int index:cur)
+                    update(index,v-u,BIT,n);
+                map.remove(u);
+                if(!map.containsKey(v))
+                    map.put(v,new ArrayList<>());
+                for(int index:cur)
+                    map.get(v).add(index);
+                out.printLine(sum(n,BIT));
+            }
+        }
+       // update(0, 1, BIT, n);
+        // out.printLine(sum(n,BIT));
         out.flush();
         out.close();
     }

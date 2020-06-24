@@ -168,38 +168,73 @@ class Main{
             return b; 
         return gcd(b % a, a); 
     } 
-    
-    public static int lis(List<Integer> list)
+    static int mod = (int)(1e9+7);
+    public static long pow(long a,long b)
     {
-        int[] dp = new int[list.size()];
-        int len = 0;
-        for (int num : list) {
-            int i = Arrays.binarySearch(dp, 0, len, num);
-            if (i < 0) {
-                i = -(i + 1);
+        long ans = 1;
+        while(b> 0)
+        {
+            if((b & 1)==1){
+                ans = (ans*a) % mod; 
             }
-            dp[i] = num;
-            if (i == len) {
-                len++;
-            }
+            a = (a*a) % mod;
+            b = b>>1;
         }
-        return len;
+        return ans;
     }
+
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
-        //IOUtils io = new IOUtils();
-        int t = in.nextInt();
-        while(t-- >0)
+        //IOUtils io = new IOUtils()
+        int n = in.nextInt();
+        String s = in.nextLine(),t = in.nextLine();
+        TreeSet<Integer> zeros = new TreeSet<>();
+        TreeSet<Integer> ones = new TreeSet<>();
+        for(int i=0;i<n;i++)
         {
-            int n = in.nextInt(),m = in.nextInt();
-            int[] arr = in.nextIntArray(n);
-            List<Integer> list = new ArrayList<>();
-            for(int i:arr)
-                if(i!=m)
-                    list.add(i);
-            out.printLine(lis(list));
+            if(s.charAt(i)!=t.charAt(i))
+            {
+                if(s.charAt(i)=='0')
+                    zeros.add(i);
+                else
+                    ones.add(i);
+            }
         }
+        if(zeros.size()!=ones.size())
+        {
+            System.out.println("-1");
+            return;
+        }
+        int res = 0;
+        while(!zeros.isEmpty())
+        {
+            TreeSet<Integer> a = null,b = null;
+            if(ones.first()<zeros.first())
+            {
+                a = ones;
+                b = zeros;
+            }
+            else{
+                a = zeros;
+                b = ones;
+            }
+            int pos = -1;
+            while(true)
+            {
+                Integer higher = a.higher(pos);
+                if(higher==null)
+                    break;
+                Integer bhigher = b.higher(higher);
+                if(bhigher==null)
+                    break;
+                a.remove(higher);
+                b.remove(bhigher);
+                pos = bhigher;
+            }
+            res++;
+        }
+        out.printLine(res);
         out.flush();
         out.close();
     }

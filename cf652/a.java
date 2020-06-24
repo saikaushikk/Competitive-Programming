@@ -168,23 +168,21 @@ class Main{
             return b; 
         return gcd(b % a, a); 
     } 
-    
-    public static int lis(List<Integer> list)
+    static int mod = (int)(1e9+7);
+    public static long pow(long a,long b)
     {
-        int[] dp = new int[list.size()];
-        int len = 0;
-        for (int num : list) {
-            int i = Arrays.binarySearch(dp, 0, len, num);
-            if (i < 0) {
-                i = -(i + 1);
+        long ans = 1;
+        while(b> 0)
+        {
+            if((b & 1)==1){
+                ans = (ans*a) % mod; 
             }
-            dp[i] = num;
-            if (i == len) {
-                len++;
-            }
+            a = (a*a) % mod;
+            b = b>>1;
         }
-        return len;
+        return ans;
     }
+
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
@@ -192,13 +190,14 @@ class Main{
         int t = in.nextInt();
         while(t-- >0)
         {
-            int n = in.nextInt(),m = in.nextInt();
-            int[] arr = in.nextIntArray(n);
-            List<Integer> list = new ArrayList<>();
-            for(int i:arr)
-                if(i!=m)
-                    list.add(i);
-            out.printLine(lis(list));
+            long n = in.nextLong();
+            if(n%4==0)
+            {
+                out.printLine("YES");
+            }
+            else{
+                out.printLine("NO");
+            }
         }
         out.flush();
         out.close();
