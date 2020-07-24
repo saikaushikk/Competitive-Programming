@@ -182,42 +182,65 @@ class Main{
         }
         return ans;
     }
-
-    public static void main(String[] args) {
-        InputReader in = new InputReader(System.in);
-        OutputWriter out = new OutputWriter(System.out);
-        //IOUtils io = new IOUtils();
-        int n = in.nextInt(),p = in.nextInt();
-        int[] arr = in.nextIntArray(n);
-        Arrays.sort(arr);
-        var f = new int[2001];
-        for(int i=0;i<=2000;i++)
+    public static int[] lps(String s)
+    {
+        int n = s.length();
+        int[] lps = new int[n];
+        lps[0] = 0;
+        int i = 1,len=0;
+        while(i<n)
         {
-            f[i] = 1;
-            for(int j=0;j<n;j++)
+            if(s.charAt(i)==s.charAt(len))
             {
-                int min = Math.max(0,arr[j]-i);
-                if(min<=j)
+                len++;
+                lps[i] = len;
+                i++;
+            }
+            else
+            {
+                if(len==0)
                 {
-                    f[i]*=(j-min+1);
-                    f[i]%=p;
+                    lps[i] = 0;
+                    i++;
                 }
                 else
                 {
-                    f[i] = 0;
-                    break;
+                    len = lps[len-1];
                 }
             }
         }
-        List<Integer> res = new ArrayList<>();
-        for(int i=0;i<=2000;i++)
-            if(f[i]>0)
-                res.add(i);
-        out.printLine(res.size());
-        for(int i=0;i<res.size();i++)
-            out.print(res.get(i) + " ");
-        out.printLine();
-        out.flush();
-        out.close();
+        return lps;
+    }
+    public static void main(String[] args) {
+        InputReader in = new InputReader(System.in);
+        //IOUtils io = new IOUtils();
+        String s = in.nextLine();
+        int n = s.length();
+        int[] lps = lps(s);
+        if(lps[n-1]!=0)
+        {
+            for(int i=0;i<n-1;i++)
+            {
+                if(lps[i]==lps[n-1])
+                {
+                    System.out.println(s.substring(0,lps[n-1]));
+                    return;                
+                }
+            }
+            int y = lps[lps[n-1]-1];
+            if(y!=0)
+            {
+                System.out.println(s.substring(0,y));
+                return;
+            }
+            else
+            {
+                System.out.println("Just a legend");
+            }
+        }
+        else
+        {
+            System.out.println("Just a legend");
+        }
     }
 }

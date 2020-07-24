@@ -1,6 +1,6 @@
 import java.util.*;
 import java.io.*;
-class Main{
+class Solution{
     static class InputReader {
 
         private final InputStream stream;
@@ -168,55 +168,76 @@ class Main{
             return b; 
         return gcd(b % a, a); 
     } 
-    static int mod = (int)(1e9+7);
-    public static long pow(long a,long b)
+    static Integer[][] dp;
+    public static int dfs(int[] arr,int n,int idx,int prevVal,int prevnote)
     {
-        long ans = 1;
-        while(b> 0)
+        if(idx==n)
         {
-            if((b & 1)==1){
-                ans = (ans*a) % mod; 
-            }
-            a = (a*a) % mod;
-            b = b>>1;
+            return 0;
         }
-        return ans;
+      //  System.out.println(prevnote);
+        if(dp[idx][prevnote]!=null)
+            return dp[idx][prevnote];
+        int res = Integer.MAX_VALUE;
+        if(arr[idx]==prevVal)
+        {
+            res = Math.min(res,dfs(arr,n,idx+1,arr[idx],prevnote));
+        }
+        else if(arr[idx]>prevVal)
+        {
+            if(prevnote==3)
+            {
+                for(int i=0;i<4;i++)
+                {
+                    res = Math.min(res,1+dfs(arr,n,idx+1,arr[idx],i));
+                }
+            }
+            else
+            {
+                for(int i=prevnote+1;i<4;i++)
+                {
+                    res = Math.min(res,dfs(arr,n,idx+1,arr[idx],i));
+                }
+            }
+        }
+        else
+        {
+            if(prevnote==0)
+            {
+                for(int i=0;i<4;i++)
+                {
+                    res = Math.min(res,1+dfs(arr,n,idx+1,arr[idx],i));
+                }
+            }
+            else
+            {
+                for(int i=0;i<prevnote;i++)
+                {
+                    res = Math.min(res,dfs(arr,n,idx+1,arr[idx],i));
+                }
+            }
+        }
+        return dp[idx][prevnote]=res;
     }
-
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt(),p = in.nextInt();
-        int[] arr = in.nextIntArray(n);
-        Arrays.sort(arr);
-        var f = new int[2001];
-        for(int i=0;i<=2000;i++)
+        int t = in.nextInt();
+        int caseno = 1;
+        while(t-- >0)
         {
-            f[i] = 1;
-            for(int j=0;j<n;j++)
+            int n = in.nextInt();
+            int[] arr = in.nextIntArray(n);
+            int res = Integer.MAX_VALUE;
+            dp = new Integer[n+1][4];
+            for(int i=0;i<4;i++)
             {
-                int min = Math.max(0,arr[j]-i);
-                if(min<=j)
-                {
-                    f[i]*=(j-min+1);
-                    f[i]%=p;
-                }
-                else
-                {
-                    f[i] = 0;
-                    break;
-                }
+                res = Math.min(res,dfs(arr, n, 1, arr[0], i));
             }
+            out.printLine("Case #"+caseno+": " + res);
+            caseno++;
         }
-        List<Integer> res = new ArrayList<>();
-        for(int i=0;i<=2000;i++)
-            if(f[i]>0)
-                res.add(i);
-        out.printLine(res.size());
-        for(int i=0;i<res.size();i++)
-            out.print(res.get(i) + " ");
-        out.printLine();
         out.flush();
         out.close();
     }

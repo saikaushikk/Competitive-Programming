@@ -182,41 +182,39 @@ class Main{
         }
         return ans;
     }
-
+    static int res = 0,m,n,k;
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt(),p = in.nextInt();
-        int[] arr = in.nextIntArray(n);
-        Arrays.sort(arr);
-        var f = new int[2001];
-        for(int i=0;i<=2000;i++)
+        n = in.nextInt(); m =in.nextInt(); k = in.nextInt();
+        char[][] grid = new char[n][m];
+        for(int i=0;i<n;i++)
+            grid[i] = in.nextLine().toCharArray();
+        int res = 0;
+        for(int i=0;i<(1<<(n+m));i++)
         {
-            f[i] = 1;
-            for(int j=0;j<n;j++)
+            boolean[] x = new boolean[n+m];
+            for(int j=0;j<(n+m);j++)
             {
-                int min = Math.max(0,arr[j]-i);
-                if(min<=j)
+                if((1&(i>>j))==1)
                 {
-                    f[i]*=(j-min+1);
-                    f[i]%=p;
-                }
-                else
-                {
-                    f[i] = 0;
-                    break;
+                    x[j] = true;
                 }
             }
+            int black = 0;
+            for(int j=0;j<n;j++)
+            {
+                for(int k =0;k<m;k++)
+                {
+                    if(x[j] && x[n+k] && grid[j][k]=='#')
+                        black++;
+                }
+            }
+            if(black==k)
+                res++;
         }
-        List<Integer> res = new ArrayList<>();
-        for(int i=0;i<=2000;i++)
-            if(f[i]>0)
-                res.add(i);
-        out.printLine(res.size());
-        for(int i=0;i<res.size();i++)
-            out.print(res.get(i) + " ");
-        out.printLine();
+        out.printLine(res);
         out.flush();
         out.close();
     }

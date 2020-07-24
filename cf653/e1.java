@@ -187,36 +187,46 @@ class Main{
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt(),p = in.nextInt();
-        int[] arr = in.nextIntArray(n);
-        Arrays.sort(arr);
-        var f = new int[2001];
-        for(int i=0;i<=2000;i++)
+        int n = in.nextInt(),k=in.nextInt();
+        List<Integer> a = new ArrayList<>(),b = new ArrayList<>(), c = new ArrayList<>();
+        for(int i=0;i<n;i++)
         {
-            f[i] = 1;
-            for(int j=0;j<n;j++)
+            int t = in.nextInt();
+            int x = in.nextInt();
+            int y  = in.nextInt();
+            if(x==1 && y==1)
             {
-                int min = Math.max(0,arr[j]-i);
-                if(min<=j)
-                {
-                    f[i]*=(j-min+1);
-                    f[i]%=p;
-                }
-                else
-                {
-                    f[i] = 0;
-                    break;
-                }
+                a.add(t);
+            }
+            else if(x==1 && y==0)
+            {
+                b.add(t);
+            }
+            else if(y==1 && x==0)
+            {
+                c.add(t);
             }
         }
-        List<Integer> res = new ArrayList<>();
-        for(int i=0;i<=2000;i++)
-            if(f[i]>0)
-                res.add(i);
-        out.printLine(res.size());
-        for(int i=0;i<res.size();i++)
-            out.print(res.get(i) + " ");
-        out.printLine();
+        Collections.sort(b);
+        Collections.sort(c);
+        int j = 0;
+        while(j<b.size() && j<c.size())
+        {
+            a.add(b.get(j) + c.get(j));
+            j++;
+        }
+        if(a.size()<k)
+        {
+            System.out.println("-1");
+            return;
+        }
+        Collections.sort(a);
+        long res = 0;
+        for(int i=0;i<k;i++)       
+        {
+            res+=a.get(i);
+        }
+        out.printLine(res);
         out.flush();
         out.close();
     }

@@ -187,36 +187,17 @@ class Main{
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt(),p = in.nextInt();
-        int[] arr = in.nextIntArray(n);
-        Arrays.sort(arr);
-        var f = new int[2001];
-        for(int i=0;i<=2000;i++)
+        int n = in.nextInt();
+        Map<String,Integer> map = new HashMap<>();
+        while(n-- >0)
         {
-            f[i] = 1;
-            for(int j=0;j<n;j++)
-            {
-                int min = Math.max(0,arr[j]-i);
-                if(min<=j)
-                {
-                    f[i]*=(j-min+1);
-                    f[i]%=p;
-                }
-                else
-                {
-                    f[i] = 0;
-                    break;
-                }
-            }
+            String s = in.nextLine();
+            map.put(s,map.getOrDefault(s,0)+1);
         }
-        List<Integer> res = new ArrayList<>();
-        for(int i=0;i<=2000;i++)
-            if(f[i]>0)
-                res.add(i);
-        out.printLine(res.size());
-        for(int i=0;i<res.size();i++)
-            out.print(res.get(i) + " ");
-        out.printLine();
+        out.printLine("AC x "+map.getOrDefault("AC",0));
+        out.printLine("WA x "+map.getOrDefault("WA",0));
+        out.printLine("TLE x "+map.getOrDefault("TLE",0));
+        out.printLine("RE x "+map.getOrDefault("RE",0));
         out.flush();
         out.close();
     }

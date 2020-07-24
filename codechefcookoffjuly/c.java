@@ -182,41 +182,53 @@ class Main{
         }
         return ans;
     }
-
+    static List<List<Integer>> adj;
+    static long[] res;
+    static long[] d;
+    static boolean[] visited;
+    public static void dfs(int cur,int x)
+    {
+        res[cur] = d[x%3];
+        for(int v:adj.get(cur))
+        {
+            if(!visited[v])
+            {
+                visited[v] = true;
+                dfs(v,x+1);
+            }
+        }
+    }
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt(),p = in.nextInt();
-        int[] arr = in.nextIntArray(n);
-        Arrays.sort(arr);
-        var f = new int[2001];
-        for(int i=0;i<=2000;i++)
+        int t = in.nextInt();
+        while(t-- >0)
         {
-            f[i] = 1;
-            for(int j=0;j<n;j++)
+            int n = in.nextInt();
+            adj = new ArrayList<>();
+            for(int i=0;i<n;i++)
+                adj.add(new ArrayList<>());
+            for(int i=0;i<n-1;i++)
             {
-                int min = Math.max(0,arr[j]-i);
-                if(min<=j)
-                {
-                    f[i]*=(j-min+1);
-                    f[i]%=p;
-                }
-                else
-                {
-                    f[i] = 0;
-                    break;
-                }
+                int u = in.nextInt()-1,v= in.nextInt()-1;
+                adj.get(u).add(v);
+                adj.get(v).add(u);
             }
+            res = new long[n];
+            d = new long[3];
+            d[0] = 1l * 2 * 3 * 5 * 7 * 11 * 13 * 17 * 19 * 23 * 29 * 31 * 37 * 41 * 43; 
+			d[1] = 1l * 2 * 3 * 5 * 7 * 47 * 53 * 59 * 61 * 67 * 71; 
+            d[2] = 1l * 2 * 3 * 5 * 7 * 73 * 79 * 83 * 89 * 97;
+           // out.printLine();
+            visited = new boolean[n];
+            dfs(0,0);
+            for(int i=0;i<n;i++)
+            {
+                out.print(res[i] + " ");
+            }
+            out.printLine();
         }
-        List<Integer> res = new ArrayList<>();
-        for(int i=0;i<=2000;i++)
-            if(f[i]>0)
-                res.add(i);
-        out.printLine(res.size());
-        for(int i=0;i<res.size();i++)
-            out.print(res.get(i) + " ");
-        out.printLine();
         out.flush();
         out.close();
     }

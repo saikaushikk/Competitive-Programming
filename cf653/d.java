@@ -187,36 +187,53 @@ class Main{
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt(),p = in.nextInt();
-        int[] arr = in.nextIntArray(n);
-        Arrays.sort(arr);
-        var f = new int[2001];
-        for(int i=0;i<=2000;i++)
+        int t = in.nextInt();
+        while(t-- >0)
         {
-            f[i] = 1;
-            for(int j=0;j<n;j++)
+            int n = in.nextInt();
+            long k=in.nextLong();
+            long[] arr = new long[n];
+            for(int i=0;i<n;i++)
             {
-                int min = Math.max(0,arr[j]-i);
-                if(min<=j)
+                arr[i] = in.nextLong();
+            }
+            long res = 0;
+            TreeMap<Long,Long> map = new TreeMap<>();
+            long x=0;
+            long[] factor = new long[n];
+            for(int i=0;i<n;i++)
+            {
+                long cur = arr[i];
+                long mod = cur%k;
+                if(mod==0)
                 {
-                    f[i]*=(j-min+1);
-                    f[i]%=p;
+                    factor[i] = 0;
                 }
-                else
-                {
-                    f[i] = 0;
-                    break;
+                else{
+                    long closestNumber = cur-mod+k;
+                    factor[i] = closestNumber-cur;
                 }
             }
+           // out.printLine(Arrays.toString(factor));
+            for(long i:factor)
+            {
+                map.put(i,map.getOrDefault(i, 0L)+1);
+            }
+            for(long key:map.keySet())
+            {
+                if(key==0)
+                {
+                    continue;
+                }
+                x = key;
+               // out.printLine(x);
+                long count = map.get(key);
+                res = Math.max(res,(long)(x+((count-1)*k)));
+            }
+            if(res>0)
+                res++;
+            out.printLine(res);
         }
-        List<Integer> res = new ArrayList<>();
-        for(int i=0;i<=2000;i++)
-            if(f[i]>0)
-                res.add(i);
-        out.printLine(res.size());
-        for(int i=0;i<res.size();i++)
-            out.print(res.get(i) + " ");
-        out.printLine();
         out.flush();
         out.close();
     }

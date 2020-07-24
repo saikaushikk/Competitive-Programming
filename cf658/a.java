@@ -187,36 +187,38 @@ class Main{
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt(),p = in.nextInt();
-        int[] arr = in.nextIntArray(n);
-        Arrays.sort(arr);
-        var f = new int[2001];
-        for(int i=0;i<=2000;i++)
+        int t = in.nextInt();
+        while(t-- >0)
         {
-            f[i] = 1;
-            for(int j=0;j<n;j++)
+            int n = in.nextInt(),m = in.nextInt();
+            int[] a = in.nextIntArray(n);
+            int[] b = in.nextIntArray(m);
+            Set<Integer> set = new HashSet<>();
+            for(int i:a)
             {
-                int min = Math.max(0,arr[j]-i);
-                if(min<=j)
+                set.add(i);
+            }
+            boolean found = false;
+            int res = -1;
+            for(int i:b)
+            {
+                if(set.contains(i))
                 {
-                    f[i]*=(j-min+1);
-                    f[i]%=p;
-                }
-                else
-                {
-                    f[i] = 0;
+                    found = true;
+                    res = i;
                     break;
                 }
             }
+            if(found)
+            {
+                out.printLine("YES");
+                out.printLine("1" + " " + res);
+            }
+            else
+            {
+                out.printLine("NO");
+            }
         }
-        List<Integer> res = new ArrayList<>();
-        for(int i=0;i<=2000;i++)
-            if(f[i]>0)
-                res.add(i);
-        out.printLine(res.size());
-        for(int i=0;i<res.size();i++)
-            out.print(res.get(i) + " ");
-        out.printLine();
         out.flush();
         out.close();
     }

@@ -182,41 +182,78 @@ class Main{
         }
         return ans;
     }
-
+    static char[][] arr;
+    static int n,m; 
+    static boolean[][] reach, visited;
+    public static boolean check(int x,int y)
+    {
+        if(x<n && y<m && reach[x][y])
+            return true;
+        else return false;
+    }
+    public static boolean check1(int x,int y)
+    {
+        if(x==0 && y==0)
+            return true;
+        if(x<n && y<m && x>=0 && y>=0)
+            return true;
+        return false;
+    }
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt(),p = in.nextInt();
-        int[] arr = in.nextIntArray(n);
-        Arrays.sort(arr);
-        var f = new int[2001];
-        for(int i=0;i<=2000;i++)
+        int t = in.nextInt();
+        while(t-- >0)
         {
-            f[i] = 1;
-            for(int j=0;j<n;j++)
+            n = in.nextInt();
+            m = in.nextInt();
+            arr = new char[n][m];
+            for(int i=0;i<n;i++)
+                arr[i] = in.nextLine().toCharArray();   
+            reach = new boolean[n][m];
+            visited = new boolean[n][m];
+            reach[n-1][m-1] = true;
+            for(int i=n-1;i>=0;i--)
             {
-                int min = Math.max(0,arr[j]-i);
-                if(min<=j)
+                for(int j=m-1;j>=0;j--)
                 {
-                    f[i]*=(j-min+1);
-                    f[i]%=p;
-                }
-                else
-                {
-                    f[i] = 0;
-                    break;
+                    if(arr[i][j]!='#' && (check(i+1,j)||check(i,j+1)))
+                        reach[i][j] = true;
                 }
             }
+            Set<List<Integer>> set = new HashSet<>();
+            StringBuilder sb = new StringBuilder();
+            sb.append(arr[0][0]);
+            set.add(Arrays.asList(0,0));
+            for(int i=1;i<=n+m-2;i++)
+            {
+                Set<List<Integer>> set1 = new HashSet<>();
+                int ch = 'z';
+                for(List<Integer> cur:set)
+                {
+                    int x = cur.get(0);
+                    int y = cur.get(1);
+                    if(check1(x+1, y) && reach[x+1][y])
+                        ch = Math.min(ch,arr[x+1][y]);
+                    if(check1(x,y+1) && reach[x][y+1])
+                        ch = Math.min(ch,arr[x][y+1]);
+                }
+                for(List<Integer> cur:set)
+                {
+                    int x = cur.get(0);
+                    int y = cur.get(1);
+                    if(check1(x+1, y) && reach[x+1][y] && arr[x+1][y]==ch)
+                        set1.add(Arrays.asList(x+1,y));
+                    if(check1(x,y+1) && reach[x][y+1] && arr[x][y+1]==ch)
+                        set1.add(Arrays.asList(x,y+1));
+                }
+                set= set1;
+                sb.append((char)(ch));
+            }
+            //sb.append(arr[n-1][m-1]);
+            out.printLine(sb);
         }
-        List<Integer> res = new ArrayList<>();
-        for(int i=0;i<=2000;i++)
-            if(f[i]>0)
-                res.add(i);
-        out.printLine(res.size());
-        for(int i=0;i<res.size();i++)
-            out.print(res.get(i) + " ");
-        out.printLine();
         out.flush();
         out.close();
     }

@@ -182,41 +182,79 @@ class Main{
         }
         return ans;
     }
-
+    static int n,m;
+    static int[][] DIR = {{0,1},{0,-1},{1,0},{-1,0}};
+    static int toPreserve;
+    public static void dfs(char[][] grid,int i,int j,boolean[][] arr)
+    {
+      //  System.out.println(i + " " + j + " " +toPreserve);
+        if(toPreserve==0)
+        {
+            return;
+        }
+        //System.out.println(i + " " + j + " " +toPreserve);
+        if(i<0 || j<0 || i>n-1 || j>m-1 || grid[i][j]=='#' || arr[i][j])
+            return;
+        arr[i][j] = true;
+        toPreserve--;
+        for(int d=0;d<4;d++)
+        {
+            int x = DIR[d][0];
+            int y = DIR[d][1];
+           // System.out.println((i+x) + " " + (j+y) + " " +toPreserve);
+            dfs(grid,i+x,j+y,arr);
+        }
+    }
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt(),p = in.nextInt();
-        int[] arr = in.nextIntArray(n);
-        Arrays.sort(arr);
-        var f = new int[2001];
-        for(int i=0;i<=2000;i++)
+        n = in.nextInt();
+        m = in.nextInt();
+        int k = in.nextInt();
+        char[][] grid = new char[n][m];
+        for(int i=0;i<n;i++)
+            grid[i] = in.nextLine().toCharArray();
+        boolean[][] arr = new boolean[n][m];
+        int count = 0;
+        for(int i=0;i<n;i++)
+            for(int j=0;j<m;j++)
+                if(grid[i][j]=='.')
+                    count++;
+        toPreserve = count-k;
+      //  System.out.println(toPreserve);
+        for(int i=0;i<n;i++)
         {
-            f[i] = 1;
-            for(int j=0;j<n;j++)
+            for(int j=0;j<m;j++)
             {
-                int min = Math.max(0,arr[j]-i);
-                if(min<=j)
-                {
-                    f[i]*=(j-min+1);
-                    f[i]%=p;
-                }
-                else
-                {
-                    f[i] = 0;
+                if(grid[i][j]=='.'){
+                    dfs(grid,i,j,arr);
                     break;
                 }
             }
         }
-        List<Integer> res = new ArrayList<>();
-        for(int i=0;i<=2000;i++)
-            if(f[i]>0)
-                res.add(i);
-        out.printLine(res.size());
-        for(int i=0;i<res.size();i++)
-            out.print(res.get(i) + " ");
-        out.printLine();
+      // System.out.println(Arrays.deepToString(arr));
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<m;j++)
+            {
+                if(grid[i][j]=='.')
+                {
+                    if(!arr[i][j])
+                    {
+                        grid[i][j] = 'X';
+                    }
+                }
+            }
+        }
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<m;j++)
+            {
+                out.print(grid[i][j]);
+            }
+            out.printLine();
+        }
         out.flush();
         out.close();
     }

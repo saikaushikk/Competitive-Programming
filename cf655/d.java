@@ -187,36 +187,23 @@ class Main{
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt(),p = in.nextInt();
-        int[] arr = in.nextIntArray(n);
-        Arrays.sort(arr);
-        var f = new int[2001];
-        for(int i=0;i<=2000;i++)
+        int n = in.nextInt();
+        int[] arr = new int[n+n];
+        for(int i=0;i<n;i++)
+            arr[i]=arr[i+n] = in.nextInt();
+        long[] pre = new long[n+n+2];
+        for(int i=2;i<pre.length;i++)
         {
-            f[i] = 1;
-            for(int j=0;j<n;j++)
-            {
-                int min = Math.max(0,arr[j]-i);
-                if(min<=j)
-                {
-                    f[i]*=(j-min+1);
-                    f[i]%=p;
-                }
-                else
-                {
-                    f[i] = 0;
-                    break;
-                }
-            }
+            pre[i] = pre[i-2] + arr[i-2];
         }
-        List<Integer> res = new ArrayList<>();
-        for(int i=0;i<=2000;i++)
-            if(f[i]>0)
-                res.add(i);
-        out.printLine(res.size());
-        for(int i=0;i<res.size();i++)
-            out.print(res.get(i) + " ");
-        out.printLine();
+        // out.printLine(Arrays.toString(arr));
+        // out.printLine(Arrays.toString(pre));
+        long res = 0;
+        for(int i=n;i<2*n;i++)
+        {
+            res = Math.max(res,pre[i+1]-pre[i-n]);
+        }
+        out.printLine(res);
         out.flush();
         out.close();
     }

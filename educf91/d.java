@@ -182,42 +182,71 @@ class Main{
         }
         return ans;
     }
-
+    public static long elim(int[] a,int l,int r,long x,long k,long y)
+    {
+        int size = r-l-1;
+        if(size<=0)
+            return 0;
+        int max = 0;
+        for(int i=l+1;i<r;i++)
+            max = Math.max(max,a[i]);
+        if(max>Math.max(a[l],a[r]) && size<k)
+            return -1;
+        if(y*k>=x)
+        {
+            return y*(size%k)+x*(size/k);
+        }
+        else
+        {
+            if(max>Math.max(a[l],a[r]))
+            {
+                return x+y*(size-k);
+            }
+            else
+                return y*size;
+        }
+    }
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
-        OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt(),p = in.nextInt();
-        int[] arr = in.nextIntArray(n);
-        Arrays.sort(arr);
-        var f = new int[2001];
-        for(int i=0;i<=2000;i++)
+        int n = in.nextInt(),m = in.nextInt();
+        long x = in.nextLong(),k = in.nextLong(),y = in.nextLong();
+        int[] a = new int[n+2];
+        int[] b = new int[n+2];
+        for(int i=0;i<n;i++)
         {
-            f[i] = 1;
-            for(int j=0;j<n;j++)
+            a[i+1] = in.nextInt();
+        }
+        for(int i=0;i<m;i++)
+        {
+            b[i+1] = in.nextInt();
+        }
+        int lasti = -1;
+        long res = 0;
+        int j = 0;
+        for(int i=0;i<n+2 && j<m+2;i++)
+        {
+            if(a[i]==b[j])
             {
-                int min = Math.max(0,arr[j]-i);
-                if(min<=j)
+                if(lasti!=-1)
                 {
-                    f[i]*=(j-min+1);
-                    f[i]%=p;
+                    long cur = elim(a,lasti,i,x,k,y);
+                    if(cur==-1)
+                    {
+                        System.out.println("-1");
+                        return;
+                    }
+                    res+=cur;
                 }
-                else
-                {
-                    f[i] = 0;
-                    break;
-                }
+                lasti = i;
+                j++;
             }
         }
-        List<Integer> res = new ArrayList<>();
-        for(int i=0;i<=2000;i++)
-            if(f[i]>0)
-                res.add(i);
-        out.printLine(res.size());
-        for(int i=0;i<res.size();i++)
-            out.print(res.get(i) + " ");
-        out.printLine();
-        out.flush();
-        out.close();
+        if(j!=m+2)
+        {
+            System.out.println("-1");
+            return;
+        }
+        System.out.println(res);
     }
 }

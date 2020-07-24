@@ -187,36 +187,53 @@ class Main{
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt(),p = in.nextInt();
-        int[] arr = in.nextIntArray(n);
-        Arrays.sort(arr);
-        var f = new int[2001];
-        for(int i=0;i<=2000;i++)
+        int t = in.nextInt();
+        while(t-- >0)
         {
-            f[i] = 1;
-            for(int j=0;j<n;j++)
+            int n = in.nextInt();
+            int[] arr = in.nextIntArray(n);
+            int[] res = new int[3];
+            boolean found = false;
+            int[] pos = new int[n+1];
+            for(int i=0;i<n;i++)
             {
-                int min = Math.max(0,arr[j]-i);
-                if(min<=j)
+                pos[arr[i]] = i;
+                //out.printLine(arr[i] + " " + pos[arr[i]]);
+            }
+            for(int i=3;i<=n;i++)
+            {
+                boolean foundleft = false,foundright = false;
+                int left = -1,right = -1;
+                for(int j=1;j<i;j++)
                 {
-                    f[i]*=(j-min+1);
-                    f[i]%=p;
+                    if(pos[j]<pos[i]){
+                        foundleft = true;
+                        left = pos[j];
+                    }
+                    if(pos[j]>pos[i])
+                    {
+                        foundright = true;
+                        right = pos[j];
+                    }
                 }
-                else
-                {
-                    f[i] = 0;
+                if(foundleft&&foundright){
+                    res[0] = left;
+                    res[1] = pos[i];
+                    res[2] = right;
+                    found = true;
                     break;
                 }
             }
+            if(found)
+            {
+                out.printLine("YES");
+                out.printLine((res[0]+1) + " "+ (res[1]+1) +  " " + (res[2]+1));
+            }
+            else
+            {
+                out.printLine("NO");
+            }
         }
-        List<Integer> res = new ArrayList<>();
-        for(int i=0;i<=2000;i++)
-            if(f[i]>0)
-                res.add(i);
-        out.printLine(res.size());
-        for(int i=0;i<res.size();i++)
-            out.print(res.get(i) + " ");
-        out.printLine();
         out.flush();
         out.close();
     }

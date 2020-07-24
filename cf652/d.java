@@ -188,8 +188,19 @@ class Main{
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
         int t = in.nextInt();
+        int max = 3000000;
+        long[] dp = new long[max];
+        dp[3] = 1;
+        for(int i=4;i<max;i++)
+        {
+            dp[i] = (2*dp[i-2] + dp[i-1])%mod;
+            if(i%3==0)
+                dp[i] = (dp[i]+1)%mod;
+        }
         while(t-- >0)
         {
+            int n = in.nextInt();
+            out.printLine((4*dp[n])%mod);
         }
         out.flush();
         out.close();

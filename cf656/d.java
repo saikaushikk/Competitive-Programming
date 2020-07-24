@@ -182,41 +182,53 @@ class Main{
         }
         return ans;
     }
-
+    public static int dfs(char[] s,int l,int r,int c)
+    {
+       
+        if(l==r)
+        {
+            if((s[l]-'a')==c)
+                return 0;
+            else
+                return 1;
+        }
+        //System.out.println(l + " " + r);
+        int res = Integer.MAX_VALUE;
+        //make first half 'c'-string
+        int count = 0;
+        int mid = l + (r-l)/2;
+        for(int i=l;i<=mid;i++)
+        {
+            if((s[i]-'a')!=c)
+            {
+                count++;
+            }
+        }
+        res = Math.min(res,count+dfs(s,mid+1,r,c+1));
+        //make second half 'c'-string
+        count = 0;
+        for(int i=mid+1;i<=r;i++)
+        {
+            if((s[i]-'a')!=c)
+            {
+                count++;
+            }
+        }
+        res = Math.min(res,count+dfs(s,l,mid,c+1));
+        return res;
+    }
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt(),p = in.nextInt();
-        int[] arr = in.nextIntArray(n);
-        Arrays.sort(arr);
-        var f = new int[2001];
-        for(int i=0;i<=2000;i++)
+        int t = in.nextInt();
+        while(t-- >0)
         {
-            f[i] = 1;
-            for(int j=0;j<n;j++)
-            {
-                int min = Math.max(0,arr[j]-i);
-                if(min<=j)
-                {
-                    f[i]*=(j-min+1);
-                    f[i]%=p;
-                }
-                else
-                {
-                    f[i] = 0;
-                    break;
-                }
-            }
+            int n = in.nextInt();
+            char[] s = in.nextLine().toCharArray();
+            //System.out.println(s.length);
+            out.printLine(dfs(s,0,n-1,0));
         }
-        List<Integer> res = new ArrayList<>();
-        for(int i=0;i<=2000;i++)
-            if(f[i]>0)
-                res.add(i);
-        out.printLine(res.size());
-        for(int i=0;i<res.size();i++)
-            out.print(res.get(i) + " ");
-        out.printLine();
         out.flush();
         out.close();
     }

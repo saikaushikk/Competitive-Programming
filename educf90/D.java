@@ -1,6 +1,6 @@
 import java.util.*;
 import java.io.*;
-class Main{
+public class D{
     static class InputReader {
 
         private final InputStream stream;
@@ -182,41 +182,42 @@ class Main{
         }
         return ans;
     }
-
+    public static long mss(List<Integer> l)
+    {
+        long res = 0,msf = 0;
+        for(int x:l)
+        {
+            msf = Math.max(0,msf+x);
+            res = Math.max(res,msf);
+        }
+        return res;
+    }
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt(),p = in.nextInt();
-        int[] arr = in.nextIntArray(n);
-        Arrays.sort(arr);
-        var f = new int[2001];
-        for(int i=0;i<=2000;i++)
+        int t = in.nextInt();
+        while(t-- >0)
         {
-            f[i] = 1;
-            for(int j=0;j<n;j++)
+            int n = in.nextInt();
+            int[] arr = in.nextIntArray(n);
+            long base = 0;
+            for(int i=0;i<n;i++)
             {
-                int min = Math.max(0,arr[j]-i);
-                if(min<=j)
-                {
-                    f[i]*=(j-min+1);
-                    f[i]%=p;
-                }
-                else
-                {
-                    f[i] = 0;
-                    break;
-                }
+                if(i%2==0)
+                    base+=arr[i];
             }
+            List<Integer> b1 = new ArrayList<>(),b2 = new ArrayList<>();
+            for(int i=0;i+1<n;i+=2)
+            {
+                b1.add(arr[i+1]-arr[i]);
+            }
+            for(int i=1;i+1<n;i+=2)
+            {
+                b2.add(arr[i]-arr[i+1]);
+            }
+            out.printLine(base+Math.max(0,Math.max(mss(b1),mss(b2))));
         }
-        List<Integer> res = new ArrayList<>();
-        for(int i=0;i<=2000;i++)
-            if(f[i]>0)
-                res.add(i);
-        out.printLine(res.size());
-        for(int i=0;i<res.size();i++)
-            out.print(res.get(i) + " ");
-        out.printLine();
         out.flush();
         out.close();
     }

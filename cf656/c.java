@@ -182,41 +182,51 @@ class Main{
         }
         return ans;
     }
-
+    public static boolean isValid(int[] arr,int l,int n)
+    {
+        int min = 0;
+        int left = l, right = n-1;
+        while(left<=right)
+        {
+            //System.out.println(min);
+            if(Math.min(arr[left],arr[right])<min)
+            {
+                return false;
+            }
+            min = Math.min(arr[left],arr[right]);
+            if(arr[left]<=arr[right])
+                left++;
+            else
+                right--;
+        }
+        return true;
+    }
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt(),p = in.nextInt();
-        int[] arr = in.nextIntArray(n);
-        Arrays.sort(arr);
-        var f = new int[2001];
-        for(int i=0;i<=2000;i++)
+        int t = in.nextInt();
+        while(t-- >0)
         {
-            f[i] = 1;
-            for(int j=0;j<n;j++)
+            int n = in.nextInt();
+            int[] arr = in.nextIntArray(n);
+           // out.printLine(isValid(arr, 0, n));
+            int l = 0; int h = n;
+            while(l<h)
             {
-                int min = Math.max(0,arr[j]-i);
-                if(min<=j)
+                int len = l + (h-l)/2;
+                if(isValid(arr,len,n))
                 {
-                    f[i]*=(j-min+1);
-                    f[i]%=p;
+                    h = len;
+                    // res = Math.min(l,res);
                 }
                 else
                 {
-                    f[i] = 0;
-                    break;
+                    l = len+1;
                 }
             }
+            out.printLine(l);
         }
-        List<Integer> res = new ArrayList<>();
-        for(int i=0;i<=2000;i++)
-            if(f[i]>0)
-                res.add(i);
-        out.printLine(res.size());
-        for(int i=0;i<res.size();i++)
-            out.print(res.get(i) + " ");
-        out.printLine();
         out.flush();
         out.close();
     }

@@ -1,6 +1,6 @@
 import java.util.*;
 import java.io.*;
-class Main{
+public class A{
     static class InputReader {
 
         private final InputStream stream;
@@ -187,36 +187,30 @@ class Main{
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt(),p = in.nextInt();
-        int[] arr = in.nextIntArray(n);
-        Arrays.sort(arr);
-        var f = new int[2001];
-        for(int i=0;i<=2000;i++)
+        int t = in.nextInt();
+        while(t-- >0)
         {
-            f[i] = 1;
-            for(int j=0;j<n;j++)
+            long a = in.nextLong(),b = in.nextLong(),c = in.nextLong();
+            long[] res = new long[2];
+            if(a<c)
             {
-                int min = Math.max(0,arr[j]-i);
-                if(min<=j)
-                {
-                    f[i]*=(j-min+1);
-                    f[i]%=p;
-                }
-                else
-                {
-                    f[i] = 0;
-                    break;
-                }
+                res[0] = 1;
             }
+            else
+            {
+                res[0] = -1;
+            }
+            double temp = c/b;
+            if(temp<a)
+            {
+                res[1] = b;
+            }
+            else
+            {
+                res[1] = -1;
+            }
+            out.printLine(res[0] + " " + res[1]);
         }
-        List<Integer> res = new ArrayList<>();
-        for(int i=0;i<=2000;i++)
-            if(f[i]>0)
-                res.add(i);
-        out.printLine(res.size());
-        for(int i=0;i<res.size();i++)
-            out.print(res.get(i) + " ");
-        out.printLine();
         out.flush();
         out.close();
     }

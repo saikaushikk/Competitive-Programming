@@ -182,41 +182,76 @@ class Main{
         }
         return ans;
     }
-
+    static class Pair{
+        int t,s,d;
+        public Pair(int t,int s,int d)
+        {
+            this.t = t;
+            this.s = s;
+            this.d = d;
+        }
+    }
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt(),p = in.nextInt();
-        int[] arr = in.nextIntArray(n);
-        Arrays.sort(arr);
-        var f = new int[2001];
-        for(int i=0;i<=2000;i++)
+        int T = in.nextInt();
+        while(T-- >0)
         {
-            f[i] = 1;
-            for(int j=0;j<n;j++)
+            int n = in.nextInt(),m = in.nextInt();
+            Pair[] pairs = new Pair[m];
+            int[] indegree = new int[n];
+            int[] pos = new int[n];
+            List<List<Integer>> adj = new ArrayList<>();
+            for(int i=0;i<n;i++)
+                adj.add(new ArrayList<>());
+            for(int i=0;i<m;i++)
             {
-                int min = Math.max(0,arr[j]-i);
-                if(min<=j)
+                int t = in.nextInt(),u=in.nextInt()-1,v = in.nextInt()-1;
+                if(t==1)
                 {
-                    f[i]*=(j-min+1);
-                    f[i]%=p;
+                    indegree[v]++;
+                    adj.get(u).add(v);
+                }
+                pairs[i] = new Pair(t,u,v);
+            }
+            // System.out.println(Arrays.toString(indegree));
+            // System.out.println(adj);
+            Queue<Integer> q = new LinkedList<>();
+            for(int i=0;i<n;i++)
+                if(indegree[i]==0)
+                    q.offer(i);
+            int k = 0;
+            while(!q.isEmpty())
+            {
+                int u = q.poll();
+                pos[u] = k++;
+                for(int v:adj.get(u))
+                {
+                    indegree[v]--;
+                    if(indegree[v]==0)
+                        q.offer(v);
+                }
+            }
+            if(k<n)
+            {
+                out.printLine("NO");
+                continue;
+            }
+            out.printLine("YES");
+            for(int i=0;i<m;i++)
+            {
+                int u = pairs[i].s,v = pairs[i].d;
+                if(pairs[i].t==1 || (pos[u]<pos[v]))
+                {
+                    out.printLine((u+1) + " " + (v+1));
                 }
                 else
                 {
-                    f[i] = 0;
-                    break;
+                    out.printLine((v+1) + " " + (u+1));
                 }
             }
         }
-        List<Integer> res = new ArrayList<>();
-        for(int i=0;i<=2000;i++)
-            if(f[i]>0)
-                res.add(i);
-        out.printLine(res.size());
-        for(int i=0;i<res.size();i++)
-            out.print(res.get(i) + " ");
-        out.printLine();
         out.flush();
         out.close();
     }

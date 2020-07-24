@@ -187,35 +187,31 @@ class Main{
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt(),p = in.nextInt();
-        int[] arr = in.nextIntArray(n);
-        Arrays.sort(arr);
-        var f = new int[2001];
-        for(int i=0;i<=2000;i++)
+        int n = in.nextInt();
+        int[] arr = in.nextIntArray(n*n);
+        TreeMap<Integer,Integer> map = new TreeMap<>();
+        for(int i:arr)
         {
-            f[i] = 1;
-            for(int j=0;j<n;j++)
-            {
-                int min = Math.max(0,arr[j]-i);
-                if(min<=j)
-                {
-                    f[i]*=(j-min+1);
-                    f[i]%=p;
-                }
-                else
-                {
-                    f[i] = 0;
-                    break;
-                }
-            }
+            map.put(i,map.getOrDefault(i, 0)+1);
         }
         List<Integer> res = new ArrayList<>();
-        for(int i=0;i<=2000;i++)
-            if(f[i]>0)
-                res.add(i);
-        out.printLine(res.size());
-        for(int i=0;i<res.size();i++)
-            out.print(res.get(i) + " ");
+        for(int i=0;i<n;i++)
+        {
+            int cur = map.lastKey();
+            map.put(cur,map.get(cur)-1);
+            if(map.get(cur)==0)
+                map.remove(cur);
+            for(int x:res)
+            {
+                int g = gcd(x,cur);
+                map.put(g,map.get(g)-2);
+                if(map.get(g)==0)
+                    map.remove(g);
+            }
+            res.add(cur);
+        }
+        for(int x:res)
+            out.print(x + " ");
         out.printLine();
         out.flush();
         out.close();

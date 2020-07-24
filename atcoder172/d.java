@@ -181,42 +181,33 @@ class Main{
             b = b>>1;
         }
         return ans;
-    }
-
+    } 
+    static int max = (int)(1e7);
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt(),p = in.nextInt();
-        int[] arr = in.nextIntArray(n);
-        Arrays.sort(arr);
-        var f = new int[2001];
-        for(int i=0;i<=2000;i++)
+        int n = in.nextInt();
+        long res = 0;
+        long[] count  = new long[n+1];
+        Arrays.fill(count,1);
+        count[1] = 1;
+        for(int p=2;p<=n;p++)
         {
-            f[i] = 1;
-            for(int j=0;j<n;j++)
-            {
-                int min = Math.max(0,arr[j]-i);
-                if(min<=j)
+            // if(hash[p])
+            // {
+                for(int i=p;i<=n;i+=p)
                 {
-                    f[i]*=(j-min+1);
-                    f[i]%=p;
+                    count[i]++;
                 }
-                else
-                {
-                    f[i] = 0;
-                    break;
-                }
-            }
+            
         }
-        List<Integer> res = new ArrayList<>();
-        for(int i=0;i<=2000;i++)
-            if(f[i]>0)
-                res.add(i);
-        out.printLine(res.size());
-        for(int i=0;i<res.size();i++)
-            out.print(res.get(i) + " ");
-        out.printLine();
+       //  out.printLine(Arrays.toString(count));
+        for(int i=1;i<=n;i++)
+        {
+            res+=(i*count[i]);
+        }
+        out.printLine(res);
         out.flush();
         out.close();
     }

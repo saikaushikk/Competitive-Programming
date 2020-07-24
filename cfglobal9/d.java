@@ -182,41 +182,62 @@ class Main{
         }
         return ans;
     }
-
+    public static int mex(int[] arr)
+    {
+        int n = arr.length;
+        boolean[] temp = new boolean[n+1];
+        for(int i:arr)
+            temp[i] = true;
+        for(int i=0;i<=n;i++)
+            if(!temp[i]) 
+                return i;
+        return -1;
+    }
+    public static boolean solved(int[] arr)
+    {
+        for(int i=0;i<arr.length;i++)
+            if(arr[i]!=i+1)
+                return false;
+        return true;
+    }
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt(),p = in.nextInt();
-        int[] arr = in.nextIntArray(n);
-        Arrays.sort(arr);
-        var f = new int[2001];
-        for(int i=0;i<=2000;i++)
+        int t = in.nextInt();
+        while(t-- >0)
         {
-            f[i] = 1;
-            for(int j=0;j<n;j++)
+            int n = in.nextInt();
+            int[] arr = in.nextIntArray(n);
+            List<Integer> res = new ArrayList<>();
+            while(!solved(arr))
             {
-                int min = Math.max(0,arr[j]-i);
-                if(min<=j)
+                int mex = mex(arr);
+                if(mex==0)
                 {
-                    f[i]*=(j-min+1);
-                    f[i]%=p;
+                    int put = 0;
+                    for(int i=0;i<n;i++)
+                    {
+                        if(arr[i]!=i+1)
+                        {
+                            put = i;
+                            break;
+                        }
+                    }
+                    arr[put] = mex;
+                    res.add(put);
                 }
                 else
                 {
-                    f[i] = 0;
-                    break;
+                    arr[mex-1] = mex;
+                    res.add(mex-1);
                 }
             }
+            out.printLine(res.size());
+            for(int i:res)
+                out.print(i+1 + " ");
+            out.printLine();
         }
-        List<Integer> res = new ArrayList<>();
-        for(int i=0;i<=2000;i++)
-            if(f[i]>0)
-                res.add(i);
-        out.printLine(res.size());
-        for(int i=0;i<res.size();i++)
-            out.print(res.get(i) + " ");
-        out.printLine();
         out.flush();
         out.close();
     }

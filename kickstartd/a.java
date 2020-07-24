@@ -1,6 +1,6 @@
 import java.util.*;
 import java.io.*;
-class Main{
+class Solution{
     static class InputReader {
 
         private final InputStream stream;
@@ -168,55 +168,31 @@ class Main{
             return b; 
         return gcd(b % a, a); 
     } 
-    static int mod = (int)(1e9+7);
-    public static long pow(long a,long b)
-    {
-        long ans = 1;
-        while(b> 0)
-        {
-            if((b & 1)==1){
-                ans = (ans*a) % mod; 
-            }
-            a = (a*a) % mod;
-            b = b>>1;
-        }
-        return ans;
-    }
+    
 
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt(),p = in.nextInt();
-        int[] arr = in.nextIntArray(n);
-        Arrays.sort(arr);
-        var f = new int[2001];
-        for(int i=0;i<=2000;i++)
+        int t = in.nextInt();
+        int caseno = 1;
+        while(t-- >0)
         {
-            f[i] = 1;
-            for(int j=0;j<n;j++)
+            int n = in.nextInt();
+            int[] arr = in.nextIntArray(n);
+            long res = 0;
+            long max=-1;
+            for(int i=0;i<n;i++)
             {
-                int min = Math.max(0,arr[j]-i);
-                if(min<=j)
+                if((arr[i]>max) && ((i==n-1) || (arr[i]>arr[i+1])))
                 {
-                    f[i]*=(j-min+1);
-                    f[i]%=p;
+                    res++;
                 }
-                else
-                {
-                    f[i] = 0;
-                    break;
-                }
+                max=Math.max(max,arr[i]);
             }
+            out.printLine("Case #"+caseno+": " + res);
+            caseno++;
         }
-        List<Integer> res = new ArrayList<>();
-        for(int i=0;i<=2000;i++)
-            if(f[i]>0)
-                res.add(i);
-        out.printLine(res.size());
-        for(int i=0;i<res.size();i++)
-            out.print(res.get(i) + " ");
-        out.printLine();
         out.flush();
         out.close();
     }

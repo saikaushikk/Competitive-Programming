@@ -187,36 +187,44 @@ class Main{
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt(),p = in.nextInt();
-        int[] arr = in.nextIntArray(n);
-        Arrays.sort(arr);
-        var f = new int[2001];
-        for(int i=0;i<=2000;i++)
+        int t = in.nextInt();
+        while(t-- >0)
         {
-            f[i] = 1;
-            for(int j=0;j<n;j++)
+            char[] s = in.nextLine().toCharArray();
+            int n = s.length;
+            int[] res = new int[n];
+            Arrays.fill(res,-1);
+            int q = in.nextInt();
+            while(q-- >0)
             {
-                int min = Math.max(0,arr[j]-i);
-                if(min<=j)
+                int x = in.nextInt();
+                x--;
+                int count = 0;
+                boolean flag = false;
+                for(int i=x;i<n;i++)
                 {
-                    f[i]*=(j-min+1);
-                    f[i]%=p;
+                    if(s[i]==')')
+                    {
+                        if(count>0)
+                            count--;
+                    }
+                    else
+                    {
+                        count++;
+                        flag = true;
+                    }
+                    if(flag && count==0){
+                        res[x] = i;
+                        break;
+                    }
                 }
+                if(res[x]==-1)
+                    out.printLine("-1");
                 else
-                {
-                    f[i] = 0;
-                    break;
-                }
+                    out.printLine(res[x]+1);
             }
+
         }
-        List<Integer> res = new ArrayList<>();
-        for(int i=0;i<=2000;i++)
-            if(f[i]>0)
-                res.add(i);
-        out.printLine(res.size());
-        for(int i=0;i<res.size();i++)
-            out.print(res.get(i) + " ");
-        out.printLine();
         out.flush();
         out.close();
     }

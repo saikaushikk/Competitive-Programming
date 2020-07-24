@@ -187,36 +187,80 @@ class Main{
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt(),p = in.nextInt();
-        int[] arr = in.nextIntArray(n);
-        Arrays.sort(arr);
-        var f = new int[2001];
-        for(int i=0;i<=2000;i++)
+        int t = in.nextInt();
+        while(t-- >0)
         {
-            f[i] = 1;
-            for(int j=0;j<n;j++)
+            int n = in.nextInt(),m = in.nextInt();
+            boolean flag = true;
+            int[][] arr = new int[n][m];
+            for(int i=0;i<n;i++)
+                arr[i] = in.nextIntArray(m);
+            for(int i=0;i<n;i++)
             {
-                int min = Math.max(0,arr[j]-i);
-                if(min<=j)
+                for(int j=0;j<m;j++)
                 {
-                    f[i]*=(j-min+1);
-                    f[i]%=p;
-                }
-                else
-                {
-                    f[i] = 0;
-                    break;
+                    if(i==0)
+                    {
+                        if((j==0 || j==m-1) && arr[i][j]>2)
+                            flag = false;
+                        else if(arr[i][j]>3)
+                            flag = false;
+                    }
+                    else if(i==n-1)
+                    {
+                        if((j==0 || j==m-1) && arr[i][j]>2)
+                            flag = false;
+                        else if(arr[i][j]>3)
+                            flag = false;
+                    }
+                    else if((j==0 || (j==m-1)) && arr[i][j]>3)
+                    {
+                        flag = false;
+                    }
+                    else if(arr[i][j]>4)
+                    {
+                        flag = false;
+                    }
                 }
             }
+            if(flag)
+            {
+                out.printLine("Yes");
+                for(int i=0;i<n;i++)
+                {
+                    for(int j=0;j<m;j++)
+                    {
+                        if(i==0)
+                        {
+                            if((j==0 || j==m-1))
+                                out.print("2 ");
+                            else
+                                out.print("3 ");
+                        }
+                        else if(i==n-1)
+                        {
+                            if((j==0 || j==m-1))
+                                out.print("2 ");
+                            else
+                                out.print("3 ");
+                        }
+                        else if((j==0 || (j==m-1)))
+                        {
+                            out.print("3 ");
+                        }
+                        else
+                        {
+                            out.print("4 ");
+                        }
+                    }
+                    out.printLine();
+                }
+            }
+            else
+            {
+                out.printLine("No");
+            }
         }
-        List<Integer> res = new ArrayList<>();
-        for(int i=0;i<=2000;i++)
-            if(f[i]>0)
-                res.add(i);
-        out.printLine(res.size());
-        for(int i=0;i<res.size();i++)
-            out.print(res.get(i) + " ");
-        out.printLine();
         out.flush();
         out.close();
     }

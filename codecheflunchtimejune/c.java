@@ -182,41 +182,85 @@ class Main{
         }
         return ans;
     }
-
+    // static long res;
+    // static Long[][] dp;
+    // public static long dfs(long[] arr,int idx,long cur,int count,int k)
+    // {
+    //     if(idx==31)
+    //     {
+    //         if(count==k)
+    //             return 0;
+    //         else
+    //             return Long.MIN_VALUE;
+    //     }
+    //     if(dp[idx][count]!=null)
+    //         return dp[idx][count];
+    //    // System.out.println(idx + " " + cur + " " + k);
+    //     long res = Long.MIN_VALUE;
+    //     //not select
+    //     res = Math.max(res,dfs(arr,idx+1,cur,count,k));
+    //     //select
+    //     cur |= (1<<idx);
+    //     res = Math.max(res,arr[idx] + dfs(arr,idx+1,cur,count+1,k));
+    //     return dp[idx][count] = res;
+    // }
+    // public static void find(long curSum,long[] arr,int idx,long cur,long target)
+    // {
+    //     if(curSum>target || idx>31)
+    //     {
+    //         return;
+    //     }
+    //     if(curSum==target)
+    //     {
+    //         res = Math.min(res,cur);
+    //         return;
+    //     }
+    //     //System.out.println(curSum + " " + cur + " " + idx);
+    //     if(arr[idx]>0){
+    //         find(curSum,arr,idx+1,cur,target);
+    //         cur|=(1<<idx);
+    //         find(curSum + arr[idx],arr,idx+1,cur,target);
+    //     }   
+    // }
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt(),p = in.nextInt();
-        int[] arr = in.nextIntArray(n);
-        Arrays.sort(arr);
-        var f = new int[2001];
-        for(int i=0;i<=2000;i++)
+        int t = in.nextInt();
+        while(t-- >0)
         {
-            f[i] = 1;
-            for(int j=0;j<n;j++)
+            int n = in.nextInt(),k = in.nextInt();
+            int[] arr = in.nextIntArray(n);
+            long[] bits = new long[32];
+            for(int i=0;i<32;i++)
             {
-                int min = Math.max(0,arr[j]-i);
-                if(min<=j)
+                for(int x:arr)
                 {
-                    f[i]*=(j-min+1);
-                    f[i]%=p;
-                }
-                else
-                {
-                    f[i] = 0;
-                    break;
+                    if((x&(1<<i))!=0)
+                    {
+                        bits[i]++;
+                    }
                 }
             }
+           // bits[31] = 100000L;
+            for(int i=0;i<32;i++)
+            {
+                bits[i] = ((1<<i)*bits[i]);
+            }
+           // dp = new Long[33][33];
+            PriorityQueue<Integer> pq = new PriorityQueue<>((a,b)->(bits[a]==bits[b])?a-b:Long.compare(bits[b],bits[a]));
+            for(int i=0;i<32;i++)
+                pq.add(i);
+            int count = 0;
+            long res = 0;
+            while(count<k)
+            {
+                int cur = pq.poll();
+                res|=(1<<cur);
+                count++;
+            }
+            out.printLine(res);
         }
-        List<Integer> res = new ArrayList<>();
-        for(int i=0;i<=2000;i++)
-            if(f[i]>0)
-                res.add(i);
-        out.printLine(res.size());
-        for(int i=0;i<res.size();i++)
-            out.print(res.get(i) + " ");
-        out.printLine();
         out.flush();
         out.close();
     }

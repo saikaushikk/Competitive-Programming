@@ -182,41 +182,93 @@ class Main{
         }
         return ans;
     }
-
+    public static char getBit(char c,int flips)
+    {
+        if(flips%2==0)
+        {
+            return c;
+        }
+        else
+        {
+            if(c=='1')
+                return '0';
+            else    
+                return '1';
+        }
+    }
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt(),p = in.nextInt();
-        int[] arr = in.nextIntArray(n);
-        Arrays.sort(arr);
-        var f = new int[2001];
-        for(int i=0;i<=2000;i++)
+        int t = in.nextInt();
+        while(t-- >0)
         {
-            f[i] = 1;
-            for(int j=0;j<n;j++)
+            int n = in.nextInt();
+            char[] a = in.nextLine().toCharArray();
+            char[] b = in.nextLine().toCharArray();
+            List<Integer> res = new ArrayList<>();
+            int flips = 0;
+            boolean reverse = true;
+            int l=0,r = n-1;
+            int x = n-1;
+            while(x>=0)
             {
-                int min = Math.max(0,arr[j]-i);
-                if(min<=j)
+                int left = getBit(a[l], flips);
+                int right = getBit(a[r],flips);
+                if(reverse)
                 {
-                    f[i]*=(j-min+1);
-                    f[i]%=p;
+                    if(b[x]!=right)
+                    {
+                        if(left==b[x])
+                        {
+                            res.add(1);
+                            res.add(r-l+1);
+                        }
+                        else
+                        {
+                            res.add(r-l+1);
+                        }
+                        reverse = false;
+                        l++;
+                        flips++;
+                    }
+                    else
+                        r--;
                 }
                 else
                 {
-                    f[i] = 0;
-                    break;
+                    if(left!=b[x])
+                    {
+                        if(right==b[x])
+                        {
+                            res.add(1);
+                            res.add(r-l+1);
+                        }
+                        else
+                        {
+                            // out.printLine(r);
+                            res.add(r-l+1);
+                        }
+                        reverse = true;
+                        r--;
+                        flips++;
+                    }
+                    else
+                        l++;
                 }
-            }
+                x--;
+            }        
+            // if(reverse)
+            //     if(a[r]!=b[0])
+            //         res.add(1);
+            // else
+            //     if(a[l]!=b[0])
+            //         res.add(1);
+            out.print(res.size()+ " ");
+            for(int i:res)
+                out.print(i + " ");
+            out.printLine();
         }
-        List<Integer> res = new ArrayList<>();
-        for(int i=0;i<=2000;i++)
-            if(f[i]>0)
-                res.add(i);
-        out.printLine(res.size());
-        for(int i=0;i<res.size();i++)
-            out.print(res.get(i) + " ");
-        out.printLine();
         out.flush();
         out.close();
     }

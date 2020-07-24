@@ -187,36 +187,34 @@ class Main{
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt(),p = in.nextInt();
-        int[] arr = in.nextIntArray(n);
-        Arrays.sort(arr);
-        var f = new int[2001];
-        for(int i=0;i<=2000;i++)
+        int t = in.nextInt();
+        while(t-- >0)
         {
-            f[i] = 1;
-            for(int j=0;j<n;j++)
+            int n = in.nextInt(),k = in.nextInt();
+            int[] arr = in.nextIntArray(n);
+            boolean k_present = false , greater_present = false;
+            for(int i=0;i<n;i++)
             {
-                int min = Math.max(0,arr[j]-i);
-                if(min<=j)
+                if(arr[i]==k)
+                    k_present = true;
+                if(arr[i]>=k)
                 {
-                    f[i]*=(j-min+1);
-                    f[i]%=p;
+                    if(i>0 && arr[i-1]>=k)
+                        greater_present = true;
+                    else if(i>1 && arr[i-2]>=k)
+                        greater_present = true;
                 }
-                else
-                {
-                    f[i] = 0;
-                    break;
-                }
+            }  
+            if(k_present && (n==1|| greater_present))
+            {
+                out.printLine("Yes");
             }
+            else
+            {
+                out.printLine("No");
+            }
+
         }
-        List<Integer> res = new ArrayList<>();
-        for(int i=0;i<=2000;i++)
-            if(f[i]>0)
-                res.add(i);
-        out.printLine(res.size());
-        for(int i=0;i<res.size();i++)
-            out.print(res.get(i) + " ");
-        out.printLine();
         out.flush();
         out.close();
     }

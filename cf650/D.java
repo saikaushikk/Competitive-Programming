@@ -1,6 +1,6 @@
 import java.util.*;
 import java.io.*;
-class Main{
+public class D{
     static class InputReader {
 
         private final InputStream stream;
@@ -187,36 +187,54 @@ class Main{
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt(),p = in.nextInt();
-        int[] arr = in.nextIntArray(n);
-        Arrays.sort(arr);
-        var f = new int[2001];
-        for(int i=0;i<=2000;i++)
+        int t = in.nextInt();
+        while(t-- >0)
         {
-            f[i] = 1;
-            for(int j=0;j<n;j++)
+            char[] s = in.nextLine().toCharArray();
+            int n = in.nextInt();
+            int[] arr = in.nextIntArray(n);
+            Arrays.sort(s);
+            boolean[] killed = new boolean[n];
+            char[] ans = new char[n];
+            Arrays.fill(ans,'-');
+            int nKilled = 0;
+            int lineIndex = s.length-1;
+            while(nKilled<n)
             {
-                int min = Math.max(0,arr[j]-i);
-                if(min<=j)
+                List<Integer> zeros = new ArrayList<>();
+                for(int i=0;i<n;i++)
+                    if(!killed[i] && arr[i]==0)
+                        zeros.add(i);
+                char fillWith = '.';
+                while(true)
                 {
-                    f[i]*=(j-min+1);
-                    f[i]%=p;
+                    char current = s[lineIndex];
+                    int currentCount = 0;
+                    while(lineIndex>=0 && s[lineIndex]==current)
+                    {
+                        currentCount++;
+                        lineIndex--;
+                    }
+                    if(currentCount>=zeros.size())
+                    {
+                        fillWith = current;
+                        break;
+                    }
                 }
-                else
+                for(int z:zeros)
                 {
-                    f[i] = 0;
-                    break;
+                    killed[z] = true;
+                    ans[z] = fillWith;
+                    for(int i=0;i<n;i++)
+                    {
+                        if(!killed[i])
+                            arr[i]-=Math.abs(z-i);
+                    }
                 }
+                nKilled+=zeros.size();
             }
+            out.printLine(new String(ans));
         }
-        List<Integer> res = new ArrayList<>();
-        for(int i=0;i<=2000;i++)
-            if(f[i]>0)
-                res.add(i);
-        out.printLine(res.size());
-        for(int i=0;i<res.size();i++)
-            out.print(res.get(i) + " ");
-        out.printLine();
         out.flush();
         out.close();
     }

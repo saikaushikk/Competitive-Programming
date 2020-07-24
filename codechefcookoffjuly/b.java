@@ -187,36 +187,52 @@ class Main{
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt(),p = in.nextInt();
-        int[] arr = in.nextIntArray(n);
-        Arrays.sort(arr);
-        var f = new int[2001];
-        for(int i=0;i<=2000;i++)
+        int t = in.nextInt();
+        while(t-- >0)
         {
-            f[i] = 1;
-            for(int j=0;j<n;j++)
+            int n = in.nextInt();
+            long[] arr= new long[n];
+            for(int i=0;i<n;i++)
             {
-                int min = Math.max(0,arr[j]-i);
-                if(min<=j)
+                arr[i] = in.nextLong();
+            }
+            Set<Long> set = new HashSet<>();
+            Deque<Long> stack = new LinkedList<>();
+            boolean flag = true;
+            for(long i:arr)
+            {
+                stack.add(i);
+                if(set.contains(i))
+                    flag = false;
+                set.add(i);
+            }
+            for(int size=1;size<n;size++)
+            {
+                stack.pollLast();
+                //out.printLine(stack);
+                for(int i=0;i+size<n;i++)
                 {
-                    f[i]*=(j-min+1);
-                    f[i]%=p;
+                    long val = stack.pop()|arr[i+size]; 
+                    if(set.contains(val))
+                    {
+                        flag = false;
+                        break;
+                    }
+                    stack.addLast(val);
+                    set.add(val);
                 }
-                else
-                {
-                    f[i] = 0;
+                if(!flag)
                     break;
-                }
+            }
+            if(flag)
+            {
+                out.printLine("YES");
+            }
+            else
+            {
+                out.printLine("NO");
             }
         }
-        List<Integer> res = new ArrayList<>();
-        for(int i=0;i<=2000;i++)
-            if(f[i]>0)
-                res.add(i);
-        out.printLine(res.size());
-        for(int i=0;i<res.size();i++)
-            out.print(res.get(i) + " ");
-        out.printLine();
         out.flush();
         out.close();
     }

@@ -187,36 +187,34 @@ class Main{
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt(),p = in.nextInt();
-        int[] arr = in.nextIntArray(n);
-        Arrays.sort(arr);
-        var f = new int[2001];
-        for(int i=0;i<=2000;i++)
+        int t = in.nextInt();
+        while(t-- >0)
         {
-            f[i] = 1;
-            for(int j=0;j<n;j++)
+            int x = in.nextInt(), y = in.nextInt(), z= in.nextInt();
+            if(x==y)
             {
-                int min = Math.max(0,arr[j]-i);
-                if(min<=j)
-                {
-                    f[i]*=(j-min+1);
-                    f[i]%=p;
+                if(z<=x){
+                    out.printLine("YES");
+                    out.printLine(x + " " + z + " " + 1);
                 }
                 else
                 {
-                    f[i] = 0;
-                    break;
+                    out.printLine("NO");
+                }
+            }
+            else
+            {
+                if(Math.max(x,y)==z)
+                {
+                    out.printLine("YES");
+                    out.printLine(1 + " " + x + " " + y);
+                }
+                else
+                {
+                    out.printLine("NO");
                 }
             }
         }
-        List<Integer> res = new ArrayList<>();
-        for(int i=0;i<=2000;i++)
-            if(f[i]>0)
-                res.add(i);
-        out.printLine(res.size());
-        for(int i=0;i<res.size();i++)
-            out.print(res.get(i) + " ");
-        out.printLine();
         out.flush();
         out.close();
     }

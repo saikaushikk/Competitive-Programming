@@ -119,42 +119,42 @@ class Main{
 
     }
     static class OutputWriter {
-		private final PrintWriter writer;
- 
-		public OutputWriter(OutputStream outputStream) {
-			writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(outputStream)));
-		}
- 
-		public OutputWriter(Writer writer) {
-			this.writer = new PrintWriter(writer);
-		}
- 
-		public void print(Object...objects) {
-			for (int i = 0; i < objects.length; i++) {
-				if (i != 0)
-					writer.print(' ');
-				writer.print(objects[i]);
-			}
-		}
- 
-		public void printLine(Object...objects) {
-			print(objects);
-			writer.println();
-		}
- 
-		public void close() {
-			writer.close();
-		}
- 
-		public void flush() {
-			writer.flush();
-		}
- 
-		}
- 
+        private final PrintWriter writer;
+
+        public OutputWriter(OutputStream outputStream) {
+            writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(outputStream)));
+        }
+
+        public OutputWriter(Writer writer) {
+            this.writer = new PrintWriter(writer);
+        }
+
+        public void print(Object...objects) {
+            for (int i = 0; i < objects.length; i++) {
+                if (i != 0)
+                    writer.print(' ');
+                writer.print(objects[i]);
+            }
+        }
+
+        public void printLine(Object...objects) {
+            print(objects);
+            writer.println();
+        }
+
+        public void close() {
+            writer.close();
+        }
+
+        public void flush() {
+            writer.flush();
+        }
+
+        }
+
     static class IOUtils {
- 
-		public static int[] readIntArray(InputReader in, int size) {
+
+        public static int[] readIntArray(InputReader in, int size) {
             int[] array = new int[size];
             for (int i = 0; i < size; i++)
                 array[i] = in.nextInt();
@@ -187,36 +187,75 @@ class Main{
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt(),p = in.nextInt();
-        int[] arr = in.nextIntArray(n);
-        Arrays.sort(arr);
-        var f = new int[2001];
-        for(int i=0;i<=2000;i++)
+        int n = in.nextInt(),m=in.nextInt();
+        int[][] grid = new int[n][m];
+        for(int i=0;i<n;i++)
+            grid[i] = in.nextIntArray(m);
+        int[] r = new int[n];
+        int[] c = new int[m];
+        int res = 0;
+        if(n<m)
+        for(int i=0;i<n;i++)
         {
-            f[i] = 1;
-            for(int j=0;j<n;j++)
+            int min = 1000;
+            for(int j=0;j<m;j++)
             {
-                int min = Math.max(0,arr[j]-i);
-                if(min<=j)
-                {
-                    f[i]*=(j-min+1);
-                    f[i]%=p;
-                }
-                else
-                {
-                    f[i] = 0;
-                    break;
-                }
+                min = Math.min(min,grid[i][j]);
+            }
+            for(int j=0;j<m;j++)
+            {
+                grid[i][j]-=min;
+            }
+            r[i] = min;
+            res+=min;
+        }
+        for(int j=0;j<m;j++)
+        {
+            int min = 1000;
+            for(int i=0;i<n;i++)
+            {
+                min = Math.min(grid[i][j],min);
+            }
+            for(int i=0;i<n;i++)
+            {
+                grid[i][j]-=min;
+            }
+            c[j]=min;
+            res+=min;
+        }
+        if(n>=m)
+        for(int i=0;i<n;i++)
+        {
+            int min = 1000;
+            for(int j=0;j<m;j++)
+            {
+                min = Math.min(min,grid[i][j]);
+            }
+            for(int j=0;j<m;j++)
+            {
+                grid[i][j]-=min;
+            }
+            r[i] = min;
+            res+=min;
+        }
+        for(int i=0;i<n;i++)
+        {
+            for(int j=0;j<m;j++)
+            {
+                if(grid[i][j]!=0)
+                    res=-1;
             }
         }
-        List<Integer> res = new ArrayList<>();
-        for(int i=0;i<=2000;i++)
-            if(f[i]>0)
-                res.add(i);
-        out.printLine(res.size());
-        for(int i=0;i<res.size();i++)
-            out.print(res.get(i) + " ");
-        out.printLine();
+        out.printLine(res);
+        if(res!=-1)
+        {
+            for(int i=0;i<n;i++)
+                for(int j=0;j<r[i];j++)
+                    out.printLine("row "+(i+1));
+            for(int i=0;i<m;i++)
+                for(int j=0;j<c[i];j++)
+                    out.printLine("col "+(i+1));
+        }
         out.flush();
         out.close();
     }

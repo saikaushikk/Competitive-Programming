@@ -187,36 +187,30 @@ class Main{
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt(),p = in.nextInt();
-        int[] arr = in.nextIntArray(n);
-        Arrays.sort(arr);
-        var f = new int[2001];
-        for(int i=0;i<=2000;i++)
+        int n = in.nextInt(),m = in.nextInt();
+        long k = in.nextLong();
+        int res = 0;
+        long[] pref1 = new long[n+1];
+        long[] pref2 = new long[m+1];
+        for(int i=1;i<=n;i++)
         {
-            f[i] = 1;
-            for(int j=0;j<n;j++)
-            {
-                int min = Math.max(0,arr[j]-i);
-                if(min<=j)
-                {
-                    f[i]*=(j-min+1);
-                    f[i]%=p;
-                }
-                else
-                {
-                    f[i] = 0;
-                    break;
-                }
-            }
+            long x = in.nextLong();
+            pref1[i] = pref1[i-1]+x;
         }
-        List<Integer> res = new ArrayList<>();
-        for(int i=0;i<=2000;i++)
-            if(f[i]>0)
-                res.add(i);
-        out.printLine(res.size());
-        for(int i=0;i<res.size();i++)
-            out.print(res.get(i) + " ");
-        out.printLine();
+        for(int i=1;i<=m;i++)
+        {
+            long x = in.nextLong();
+            pref2[i] = pref2[i-1]+x;
+        }
+        for(int i=0,j=m;i<=n;i++)
+        {
+            if(pref1[i]>k)
+                break;
+            while(pref1[i]+pref2[j]>k)
+                j--;
+            res = Math.max(res,i+j);
+        }
+        out.printLine(res);
         out.flush();
         out.close();
     }

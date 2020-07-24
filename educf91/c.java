@@ -187,36 +187,39 @@ class Main{
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         //IOUtils io = new IOUtils();
-        int n = in.nextInt(),p = in.nextInt();
-        int[] arr = in.nextIntArray(n);
-        Arrays.sort(arr);
-        var f = new int[2001];
-        for(int i=0;i<=2000;i++)
+        int t = in.nextInt();
+        while(t-- >0)
         {
-            f[i] = 1;
-            for(int j=0;j<n;j++)
+            int n = in.nextInt();
+            long x = in.nextInt();
+            int[] arr = in.nextIntArray(n);
+            long res = 0;
+            PriorityQueue<Integer> pq = new PriorityQueue<>((a,b)->(b-a));
+            for(int i:arr)
+                pq.offer(i);
+            int min = 0;
+            int size = 0;
+            while(!pq.isEmpty())
             {
-                int min = Math.max(0,arr[j]-i);
-                if(min<=j)
+                //out.printLine(min + " " + size);
+                if(min*size<x)
                 {
-                    f[i]*=(j-min+1);
-                    f[i]%=p;
+                    int cur = pq.poll();
+                    size++;
+                    if(min==0)
+                        min = cur;
+                    else
+                        min = Math.min(min,cur);
                 }
-                else
+                if(min*size>=x)
                 {
-                    f[i] = 0;
-                    break;
+                    res++;
+                    min = 0;
+                    size = 0;
                 }
             }
+            out.printLine(res);
         }
-        List<Integer> res = new ArrayList<>();
-        for(int i=0;i<=2000;i++)
-            if(f[i]>0)
-                res.add(i);
-        out.printLine(res.size());
-        for(int i=0;i<res.size();i++)
-            out.print(res.get(i) + " ");
-        out.printLine();
         out.flush();
         out.close();
     }
