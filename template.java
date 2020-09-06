@@ -1,6 +1,6 @@
 import java.util.*;
 import java.io.*;
-class Main{
+public class Main{
     static class InputReader {
 
         private final InputStream stream;
@@ -151,17 +151,6 @@ class Main{
 		}
  
 		}
- 
-    static class IOUtils {
- 
-		public static int[] readIntArray(InputReader in, int size) {
-            int[] array = new int[size];
-            for (int i = 0; i < size; i++)
-                array[i] = in.nextInt();
-            return array;
-        }
-
-    }
     static int gcd(int a, int b) 
     { 
         if (a == 0) 
@@ -186,7 +175,6 @@ class Main{
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
-        //IOUtils io = new IOUtils();
         int t = in.nextInt();
         while(t-- >0)
         {
