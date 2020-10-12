@@ -1,6 +1,6 @@
 import java.util.*;
 import java.io.*;
-public class Main{
+public class D{
     static class InputReader {
 
         private final InputStream stream;
@@ -171,35 +171,42 @@ public class Main{
         }
         return ans;
     }
-
+    static void update(int arr[], int l, int r, int val)  
+    {  
+        arr[l] += val; 
+        if(r + 1 < arr.length) 
+        arr[r+1] -= val;  
+    }  
+  
+// Get the element indexed at i  
+    static int getElement(int arr[], int i)  
+    {     
+        // To get ith element sum of all the elements  
+        // from 0 to i need to be computed  
+        int res = 0;  
+        for (int j = 0 ; j <= i; j++)  
+            res += arr[j];  
+    
+        return res;  
+    }  
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
-        int t = in.nextInt();
-        while(t-- >0)
+        // int[] BIT = new int[(int)(1e9)];
+        int n = in.nextInt(),k = in.nextInt();
+        int[] arr = new int[(int)(1e9+1)];
+        for(int i=0;i<n;i++)
         {
+            int x = in.nextInt(),y = in.nextInt();
+            update(arr, x, y, i);
+        }
+        long res = 0;
+        Arrays.sort(arr,(a,b)->(a[0]-b[0]));
+        for(int i=0;i<n;i++)
+        {
+            out.printLine(Arrays.toString(arr[i])); 
         }
         out.flush();
         out.close();
     }
-}
-
-
-
-
-
-
-public long pow(int a,int b)
-{
-    int res = 1;
-    while(b>1)
-    {
-        if(b%2==1)
-        {
-            res = res * a;
-        }
-        a = a*a;
-        b = b>>1;
-    }
-    return res;
 }

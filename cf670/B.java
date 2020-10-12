@@ -1,6 +1,9 @@
 import java.util.*;
+
+import javax.lang.model.util.ElementScanner6;
+
 import java.io.*;
-public class Main{
+public class B{
     static class InputReader {
 
         private final InputStream stream;
@@ -171,35 +174,63 @@ public class Main{
         }
         return ans;
     }
-
+    public static long getAnswer(int p,int n,List<Integer> pos,List<Integer> neg)
+    {
+        long res = 1;
+        if(n==5)
+        {
+            for(int i=neg.size()-1;i>=(neg.size()-5);i--)
+                res*=neg.get(i);
+            return res;
+        }
+        for(int i=0;i<p;i++)
+            res*=pos.get(i);
+        for(int i=0;i<n;i++)
+            res*=neg.get(i);
+        return res;
+    }
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         int t = in.nextInt();
         while(t-- >0)
         {
+            int n = in.nextInt();
+            int[] arr = in.nextIntArray(n);
+            int negative = 0,positive = 0,zero = 0;
+            List<Integer> pos = new ArrayList<>();
+            List<Integer> neg = new ArrayList<>();
+            for(int x:arr)
+            {
+                if(x<0){
+                    negative++;
+                    neg.add(x);
+                }
+                else if(x>0){
+                    positive++;
+                    pos.add(x);
+                }
+                else
+                    zero++;
+            }
+            Collections.sort(neg);
+            Collections.sort(pos);
+            Collections.reverse(pos);
+            long res = Long.MIN_VALUE;
+            for(int i=0;i<=5;i++)
+            {
+                int posi = i,negi = 5-i;
+                if(posi<=positive && negi<=negative)
+                {
+                    res = Math.max(res,getAnswer(posi,negi,pos,neg));
+                }
+            }
+            // res = Math.max(res,getAnswer(0,5,pos,neg));
+            if(zero>0)
+                res = Math.max(res,0);
+            out.printLine(res);
         }
         out.flush();
         out.close();
     }
-}
-
-
-
-
-
-
-public long pow(int a,int b)
-{
-    int res = 1;
-    while(b>1)
-    {
-        if(b%2==1)
-        {
-            res = res * a;
-        }
-        a = a*a;
-        b = b>>1;
-    }
-    return res;
 }

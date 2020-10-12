@@ -1,6 +1,9 @@
 import java.util.*;
+
+import javax.lang.model.util.ElementScanner6;
+
 import java.io.*;
-public class Main{
+public class C{
     static class InputReader {
 
         private final InputStream stream;
@@ -171,35 +174,100 @@ public class Main{
         }
         return ans;
     }
-
+    static List<List<Integer>> adj;
+    static boolean[] visited;
+    static int n;
+    static int[] centroid;
+    public static int dfs(int cur)
+    {
+        int size = 1; 
+        visited[cur] = true;
+        for(int x:adj.get(cur))
+        {
+            if(!visited[x])
+            {
+                int temp = dfs(x);
+                // System.out.println(cur + " " + temp);
+                centroid[cur] = Math.max(centroid[cur],temp); 
+                size+=temp;
+            }
+        }
+        centroid[cur] = Math.max(centroid[cur],n-size);
+        return size;
+    }
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         int t = in.nextInt();
         while(t-- >0)
         {
+            n = in.nextInt();
+            adj = new ArrayList<>();
+            for(int i=0;i<=n;i++)
+                adj.add(new ArrayList<>());
+            for(int i=0;i<n-1;i++)
+            {
+                int u = in.nextInt(),v = in.nextInt();
+                adj.get(u).add(v);
+                adj.get(v).add(u);
+            }
+            centroid = new int[n+1];
+            visited = new boolean[n+1];
+            for(int i=1;i<=n;i++)
+            {
+                if(!visited[i])
+                    dfs(i);
+            }
+            int min = Integer.MAX_VALUE;
+            for(int i=1;i<=n;i++)
+                min = Math.min(min,centroid[i]);
+            int count =0;
+            for(int i=1;i<=n;i++)
+                if(min==centroid[i]) count++;
+            if(count==1)
+            {
+                int c = -1;
+                for(int i=1;i<=n;i++){
+                    if(centroid[i]==min){
+                        c = i;
+                        break;
+                    }
+                }
+                out.printLine(c + " " + adj.get(c).get(0));
+                out.printLine(c + " " + adj.get(c).get(0));
+            }
+            else
+            {
+                int c1 = 0,c2=0;
+                for(int i=1;i<=n;i++){
+                    if(centroid[i]==min)
+                    {
+                        if(c1==0)
+                        {
+                            c1 = i;
+                        }
+                        else if(c2==0)
+                        {
+                            c2 = i;
+                        }
+                        else
+                            break;
+                    }
+                }
+                int edge = -1;
+                for(int x:adj.get(c1))
+                {
+                    if(x!=c2)
+                    {
+                        edge = x;
+                        break;
+                    }
+                }
+                out.printLine(c1 + " " + edge);
+                out.printLine(c2 + " " + edge);
+            }
         }
         out.flush();
         out.close();
     }
-}
-
-
-
-
-
-
-public long pow(int a,int b)
-{
-    int res = 1;
-    while(b>1)
-    {
-        if(b%2==1)
-        {
-            res = res * a;
-        }
-        a = a*a;
-        b = b>>1;
-    }
-    return res;
 }

@@ -1,6 +1,6 @@
 import java.util.*;
 import java.io.*;
-public class Main{
+public class C{
     static class InputReader {
 
         private final InputStream stream;
@@ -171,35 +171,46 @@ public class Main{
         }
         return ans;
     }
-
+    static long res;
+    public static void change(int idx,int val,int[] arr)
+    {
+        res-=arr[0];
+        if(idx>0)
+            res-=Math.max(0,arr[idx]-arr[idx-1]);
+        if(idx<arr.length-1)
+            res-=Math.max(0,arr[idx+1]-arr[idx]);
+        arr[idx] = val;
+        if(idx>0)
+            res+=Math.max(0,arr[idx]-arr[idx-1]);
+        if(idx<arr.length-1)
+            res+=Math.max(0,arr[idx+1]-arr[idx]);
+        res+=arr[0];
+    }
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         int t = in.nextInt();
         while(t-- >0)
         {
+            int n = in.nextInt(),q = in.nextInt();
+            int[] arr = new int[n];
+            res = 0;
+            for(int i=0;i<n;i++)
+            {
+                int x = in.nextInt();
+                change(i,x,arr);
+            }
+            out.printLine(res);
+            for(int qq=0;qq<q;qq++)
+            {
+                int x = in.nextInt()-1,y=in.nextInt()-1;
+                int temp = arr[x];
+                change(x,arr[y],arr);
+                change(y,temp,arr);
+                out.printLine(res);
+            }
         }
         out.flush();
         out.close();
     }
-}
-
-
-
-
-
-
-public long pow(int a,int b)
-{
-    int res = 1;
-    while(b>1)
-    {
-        if(b%2==1)
-        {
-            res = res * a;
-        }
-        a = a*a;
-        b = b>>1;
-    }
-    return res;
 }

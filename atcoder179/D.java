@@ -1,6 +1,6 @@
 import java.util.*;
 import java.io.*;
-public class Main{
+public class D{
     static class InputReader {
 
         private final InputStream stream;
@@ -157,7 +157,6 @@ public class Main{
             return b; 
         return gcd(b % a, a); 
     } 
-    static int mod = (int)(1e9+7);
     public static long pow(long a,long b)
     {
         long ans = 1;
@@ -171,35 +170,39 @@ public class Main{
         }
         return ans;
     }
-
+    static int n;
+    static long[] dp;
+    static long mod = 998244353;
+    public static long dfs(int idx,Set<Integer> set)
+    {
+        if(idx==n)
+            return 1;
+        if(dp[idx]!=-1)
+            return dp[idx];
+        long res = 0;
+        for(int x:set)
+        {
+            if(idx+x<=n)
+                res = (res+ dfs(idx+x,set))%mod;
+        }
+        return dp[idx]=res;
+    }
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
-        int t = in.nextInt();
-        while(t-- >0)
-        {
+        n = in.nextInt();
+        int k = in.nextInt();
+        Set<Integer> set = new HashSet<>();
+        while(k-- >0)
+        {   
+            int u = in.nextInt(),v = in.nextInt();
+            for(int i=u;i<=v;i++)
+                set.add(i);
         }
+        dp = new long[n+2];
+        Arrays.fill(dp,-1);
+        out.printLine(dfs(1,set));
         out.flush();
         out.close();
     }
-}
-
-
-
-
-
-
-public long pow(int a,int b)
-{
-    int res = 1;
-    while(b>1)
-    {
-        if(b%2==1)
-        {
-            res = res * a;
-        }
-        a = a*a;
-        b = b>>1;
-    }
-    return res;
 }

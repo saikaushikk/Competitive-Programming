@@ -1,6 +1,6 @@
 import java.util.*;
 import java.io.*;
-public class Main{
+public class A{
     static class InputReader {
 
         private final InputStream stream;
@@ -175,31 +175,16 @@ public class Main{
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
-        int t = in.nextInt();
-        while(t-- >0)
+        String s = in.nextLine();
+        if(s.charAt(s.length()-1)!='s')
         {
+            out.printLine(s+"s");
+        }
+        else
+        {
+            out.printLine(s+"es");
         }
         out.flush();
         out.close();
     }
-}
-
-
-
-
-
-
-public long pow(int a,int b)
-{
-    int res = 1;
-    while(b>1)
-    {
-        if(b%2==1)
-        {
-            res = res * a;
-        }
-        a = a*a;
-        b = b>>1;
-    }
-    return res;
 }

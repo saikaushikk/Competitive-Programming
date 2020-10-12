@@ -1,6 +1,6 @@
 import java.util.*;
 import java.io.*;
-public class Main{
+public class D{
     static class InputReader {
 
         private final InputStream stream;
@@ -171,35 +171,51 @@ public class Main{
         }
         return ans;
     }
-
+    static long getMax(long sum)
+    {
+        long half = sum/2;
+        return Math.max(half,sum-half);
+    }
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
-        int t = in.nextInt();
-        while(t-- >0)
+        int n = in.nextInt();
+        long[] arr = new long[n];
+        for(int i=0;i<n;i++)
+            arr[i] = in.nextLong();
+        for(int i=n-1;i>=1;i--)
+            arr[i]=arr[i]-arr[i-1];
+        long sum = 0;
+        for(int i=1;i<n;i++)
+            if(arr[i]>0)
+                sum+=arr[i];
+        // out.printLine(Arrays.toString(arr));
+        out.printLine(getMax(arr[0]+sum));
+        int q = in.nextInt();
+        while(q-- > 0)
         {
+            int l = in.nextInt()-1;
+            int r = in.nextInt()-1;
+            long val = in.nextLong();
+            if(l>0)
+                if(arr[l]>0)
+                    sum-=arr[l];
+            arr[l]+=val;
+            if(l>0)
+                if(arr[l]>0)
+                    sum+=arr[l];
+            if(r<n-1)
+            {
+                if(arr[r+1]>0)
+                    sum-=arr[r+1];
+                arr[r+1]-=val;
+                if(arr[r+1]>0)
+                    sum+=arr[r+1];
+            }
+            // out.printLine(Arrays.toString(arr) + " " + val);
+            out.printLine(getMax(arr[0]+sum));
         }
         out.flush();
         out.close();
     }
-}
-
-
-
-
-
-
-public long pow(int a,int b)
-{
-    int res = 1;
-    while(b>1)
-    {
-        if(b%2==1)
-        {
-            res = res * a;
-        }
-        a = a*a;
-        b = b>>1;
-    }
-    return res;
 }

@@ -1,6 +1,6 @@
 import java.util.*;
 import java.io.*;
-public class Main{
+public class B{
     static class InputReader {
 
         private final InputStream stream;
@@ -176,30 +176,49 @@ public class Main{
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         int t = in.nextInt();
-        while(t-- >0)
+        outer:while(t-- >0)
         {
+            int n = in.nextInt(),k = in.nextInt();
+            Integer[] arr = new Integer[n];
+            for(int i=0;i<n;i++)
+                arr[i] = in.nextInt();
+            if(k==1)
+            {
+                Set<Integer> set = new HashSet<>(Arrays.asList(arr));
+                if(set.size()>1)
+                {
+                    out.printLine("-1");
+                }
+                else
+                    out.printLine("1");
+                continue outer;
+            }
+            int res = 0;
+            
+            while(true)
+            {
+                boolean flag = true;
+                int count = 0;
+                int prev = -1;
+                // out.printLine(Arrays.toString(arr));
+                for(int i=0;i<n;i++)
+                {
+                    if(arr[i]!=0)
+                        flag = false;
+                    if(arr[i]!=prev){
+                        if(count<k)
+                            prev = arr[i];
+                        count++;
+                    }
+                    arr[i]-=prev;
+                }
+                if(flag)
+                    break;
+                res++;  
+            }
+            out.printLine(res);
         }
         out.flush();
         out.close();
     }
-}
-
-
-
-
-
-
-public long pow(int a,int b)
-{
-    int res = 1;
-    while(b>1)
-    {
-        if(b%2==1)
-        {
-            res = res * a;
-        }
-        a = a*a;
-        b = b>>1;
-    }
-    return res;
 }

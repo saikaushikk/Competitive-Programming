@@ -1,6 +1,6 @@
 import java.util.*;
 import java.io.*;
-public class Main{
+public class A{
     static class InputReader {
 
         private final InputStream stream;
@@ -178,28 +178,13 @@ public class Main{
         int t = in.nextInt();
         while(t-- >0)
         {
+            long x = in.nextLong(),y = in.nextLong(),k = in.nextLong();
+            long sticks = k + (k*y)-1;
+            long gain = x-1;
+            long res = sticks/gain + (sticks%gain==0?0:1);
+            out.printLine(res+k);
         }
         out.flush();
         out.close();
     }
-}
-
-
-
-
-
-
-public long pow(int a,int b)
-{
-    int res = 1;
-    while(b>1)
-    {
-        if(b%2==1)
-        {
-            res = res * a;
-        }
-        a = a*a;
-        b = b>>1;
-    }
-    return res;
 }

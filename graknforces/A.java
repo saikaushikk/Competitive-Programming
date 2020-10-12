@@ -1,6 +1,6 @@
 import java.util.*;
 import java.io.*;
-public class Main{
+public class A{
     static class InputReader {
 
         private final InputStream stream;
@@ -171,35 +171,62 @@ public class Main{
         }
         return ans;
     }
+    static int[] res;
+    static boolean flag;
+    static int n;
+    public static void recurse(int idx,int[] a,int[] b, int[] c,int[] cur,int prev)
+    {
+        if(idx==n)
+        {
+            // System.out.println(Arrays.toString(cur));
+            if(cur[n-1]!=cur[0])
+            {
+                
+                flag = true;
+                res = cur.clone();
+             
+            }
+            return;
+        }
+        if(flag)
+            return;
+        if(a[idx]!=prev){
+            cur[idx] = a[idx];
+            recurse(idx+1,a,b,c,cur,cur[idx]);
+            cur[idx] = 0;
+        }
+        if(b[idx]!=prev){
+            cur[idx] = b[idx];
+            recurse(idx+1,a,b,c,cur,cur[idx]);
+            cur[idx] = 0;
+        }
+        if(c[idx]!=prev){
+            cur[idx] = c[idx];
+            recurse(idx+1,a,b,c,cur,cur[idx]);
+            cur[idx] = 0;
+        }
 
+    }
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         int t = in.nextInt();
         while(t-- >0)
         {
+            n = in.nextInt();
+            int[] a = in.nextIntArray(n);
+            int[] b = in.nextIntArray(n);
+            int[] c = in.nextIntArray(n);
+            flag = false;
+            res = new int[n];
+            recurse(0, a, b, c, new int[n], -1);
+            for(int x:res)
+            {
+                out.print(x+" ");
+            }
+            out.printLine();
         }
         out.flush();
         out.close();
     }
-}
-
-
-
-
-
-
-public long pow(int a,int b)
-{
-    int res = 1;
-    while(b>1)
-    {
-        if(b%2==1)
-        {
-            res = res * a;
-        }
-        a = a*a;
-        b = b>>1;
-    }
-    return res;
 }

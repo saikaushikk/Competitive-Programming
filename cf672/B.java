@@ -1,6 +1,6 @@
 import java.util.*;
 import java.io.*;
-public class Main{
+public class B{
     static class InputReader {
 
         private final InputStream stream;
@@ -178,28 +178,37 @@ public class Main{
         int t = in.nextInt();
         while(t-- >0)
         {
+            int n = in.nextInt();
+            int[] arr = in.nextIntArray(n);
+            long res = 0;
+            // long temp = 0;
+            // for(int i=0;i<n;i++)
+            // {
+            //     for(int j=0;j<n;j++)
+            //     {
+            //         if(j!=i){
+            //             if((arr[i]&arr[j])>(arr[i]^arr[j]))
+            //                 temp++;
+            //         }
+            //     }
+            // }
+            for(int i=31;i>=0;i--)
+            {
+                long count = 0;
+                for(int j=0;j<n;j++)
+                {
+                    int x = arr[j];
+                    if((x&(1<<i))>0){
+                        count++;
+                        arr[j] = 0;
+                    }
+                }
+                if(count>1)
+                    res+=((count*(count-1))/2);
+            }
+            out.printLine(res);
         }
         out.flush();
         out.close();
     }
-}
-
-
-
-
-
-
-public long pow(int a,int b)
-{
-    int res = 1;
-    while(b>1)
-    {
-        if(b%2==1)
-        {
-            res = res * a;
-        }
-        a = a*a;
-        b = b>>1;
-    }
-    return res;
 }

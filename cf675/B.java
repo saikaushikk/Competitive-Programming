@@ -1,6 +1,6 @@
 import java.util.*;
 import java.io.*;
-public class Main{
+public class B{
     static class InputReader {
 
         private final InputStream stream;
@@ -171,35 +171,51 @@ public class Main{
         }
         return ans;
     }
-
+    static long findMin(List<Integer> list)
+    {
+        long res= Integer.MAX_VALUE;
+        int n= list.size();
+        for(int i=0;i<n;i++)
+        {
+            long temp = 0;
+            for(int j=0;j<n;j++)
+            {
+                temp+=Math.abs(list.get(i)-list.get(j));
+            }
+            res = Math.min(res,temp);
+        }
+        return res;
+    }
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
-        OutputWriter out = new OutputWriter(System.out);
+        OutputWriter out = new OutputWriter(System.out);    
         int t = in.nextInt();
         while(t-- >0)
         {
+            int n = in.nextInt(),m = in.nextInt();
+            int[][] arr = new int[n][m];
+            for(int i=0;i<n;i++)
+                arr[i] = in.nextIntArray(m);
+            long res = 0;
+            int counteri = n%2==1?n+1:n;
+            int counterj = m%2==1?m+1:m;
+            for(int i=0;i<counteri/2;i++)
+            {
+                for(int j=0;j<counterj/2;j++){
+                    List<Integer> list = new ArrayList<>();
+                    list.add(arr[i][j]);
+                    if(j!=m-j-1)
+                        list.add(arr[i][m-j-1]);
+                    if(i!=n-i-1)
+                        list.add(arr[n-i-1][j]);
+                    if(j!=m-j-1 && i!=n-i-1)
+                        list.add(arr[n-i-1][m-j-1]);
+                    res+=findMin(list);
+                }  
+            }
+            out.printLine(res);
         }
         out.flush();
         out.close();
     }
-}
-
-
-
-
-
-
-public long pow(int a,int b)
-{
-    int res = 1;
-    while(b>1)
-    {
-        if(b%2==1)
-        {
-            res = res * a;
-        }
-        a = a*a;
-        b = b>>1;
-    }
-    return res;
 }

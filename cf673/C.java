@@ -1,6 +1,6 @@
 import java.util.*;
 import java.io.*;
-public class Main{
+public class C{
     static class InputReader {
 
         private final InputStream stream;
@@ -171,35 +171,39 @@ public class Main{
         }
         return ans;
     }
-
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         int t = in.nextInt();
         while(t-- >0)
         {
+            int n = in.nextInt();
+            int[] arr = in.nextIntArray(n);
+            int[] f = new int[n+1];
+            int[] last = new int[n+1];
+            for(int i=1;i<=n;i++)
+            {
+                int x = arr[i-1];
+                f[x] = Math.max(f[x],i-last[x]);
+                last[x] = i;
+            }
+            int[] res = new int[n+1];
+            Arrays.fill(res,-1);
+            for(int x=1;x<=n;x++)
+            {
+                f[x] = Math.max(f[x],n-last[x]+1);
+                for(int i=f[x];i<=n && res[i]==-1;i++)
+                {
+                    res[i] = x;
+                }
+            }
+            for(int i=1;i<=n;i++)
+            {
+                out.print(res[i] + " ");
+            }
+            out.printLine();
         }
         out.flush();
         out.close();
     }
-}
-
-
-
-
-
-
-public long pow(int a,int b)
-{
-    int res = 1;
-    while(b>1)
-    {
-        if(b%2==1)
-        {
-            res = res * a;
-        }
-        a = a*a;
-        b = b>>1;
-    }
-    return res;
 }

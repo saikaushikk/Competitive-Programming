@@ -1,6 +1,6 @@
 import java.util.*;
 import java.io.*;
-public class Main{
+public class C{
     static class InputReader {
 
         private final InputStream stream;
@@ -161,7 +161,7 @@ public class Main{
     public static long pow(long a,long b)
     {
         long ans = 1;
-        while(b> 0)
+        while(b>0)
         {
             if((b & 1)==1){
                 ans = (ans*a) % mod; 
@@ -175,31 +175,23 @@ public class Main{
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
-        int t = in.nextInt();
-        while(t-- >0)
-        {
-        }
+        long n = in.nextLong();
+        long res = pow(10,n);
+        // out.printLine(res);
+        res = (res-pow(9,n));
+        // out.printLine(res);
+        if(res<0)
+            res = res+mod;
+        res = (res-pow(9,n));
+        // out.printLine(res);
+        if(res<0)
+            res = res+mod;
+        res = (res+pow(8,n))%mod;
+        // out.printLine(res);
+        // if(res<0)
+        //     res = res+mod;
+        out.printLine(res);
         out.flush();
         out.close();
     }
-}
-
-
-
-
-
-
-public long pow(int a,int b)
-{
-    int res = 1;
-    while(b>1)
-    {
-        if(b%2==1)
-        {
-            res = res * a;
-        }
-        a = a*a;
-        b = b>>1;
-    }
-    return res;
 }

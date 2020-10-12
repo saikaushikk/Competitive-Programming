@@ -1,6 +1,9 @@
 import java.util.*;
+
+import javax.lang.model.util.ElementScanner6;
+
 import java.io.*;
-public class Main{
+public class C{
     static class InputReader {
 
         private final InputStream stream;
@@ -176,30 +179,76 @@ public class Main{
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         int t = in.nextInt();
-        while(t-- >0)
+        outer:while(t-- >0)
         {
+            int n = in.nextInt(),k=in.nextInt();
+            char[] s = in.nextLine().toCharArray();
+            boolean flag = true;
+            int[] mod = new int[k];
+            Arrays.fill(mod,-1);
+            for(int i=0;i<n;i++)
+            {
+                if(s[i]=='0')
+                {
+                    if(mod[i%k]==-1)
+                    {
+                        mod[i%k] = 0;
+                    }
+                    else 
+                    {
+                        if(mod[i%k]==1)
+                            flag = false;
+                    }
+                }
+                else if(s[i]=='1')
+                {
+                    if(mod[i%k]==-1)
+                    {
+                        mod[i%k]=1;
+                    }
+                    else
+                    {
+                        if(mod[i%k]==0)
+                            flag = false;
+                    }
+                }
+            }
+            if(!flag)
+            {
+                out.printLine("NO");
+                continue outer;
+            }
+            int ones = 0,zeros = 0,qs = 0;
+            // out.printLine(Arrays.toString(mod));
+            for(int i=0;i<k;i++)
+            {
+                if(mod[i]==-1)
+                    qs++;
+                else if(mod[i]==0)
+                    zeros++;
+                else 
+                    ones++;
+            }
+            if(qs==0)
+            {
+                if(ones!=k/2 || zeros!=k/2)
+                    flag = false;
+            }
+            else
+            {
+                if(ones>k/2 || zeros>k/2)
+                    flag = false;
+            }
+            if(flag)
+            {
+                out.printLine("YES");
+            }
+            else
+            {
+                out.printLine("NO");
+            }
         }
         out.flush();
         out.close();
     }
-}
-
-
-
-
-
-
-public long pow(int a,int b)
-{
-    int res = 1;
-    while(b>1)
-    {
-        if(b%2==1)
-        {
-            res = res * a;
-        }
-        a = a*a;
-        b = b>>1;
-    }
-    return res;
 }

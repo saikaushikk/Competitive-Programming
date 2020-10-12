@@ -1,6 +1,6 @@
 import java.util.*;
 import java.io.*;
-public class Main{
+public class D{
     static class InputReader {
 
         private final InputStream stream;
@@ -171,35 +171,124 @@ public class Main{
         }
         return ans;
     }
-
+    static void add(TreeMap<Long,Integer> map,long val)
+    {
+        map.put(val,map.getOrDefault(val, 0)+1);
+    }
+    static void remove(TreeMap<Long,Integer> map,long val)
+    {
+        if(map.get(val)==1)
+            map.remove(val);
+        else
+            map.put(val,map.get(val)-1);
+    }
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
-        int t = in.nextInt();
-        while(t-- >0)
+        int n = in.nextInt(),q = in.nextInt();
+        int[] arr = in.nextIntArray(n);
+        long sum = 0;
+        // TreeSet<Long> pq = new TreeSet<>((a,b)->(Long.compare(b, a)));
+        TreeSet<Long> set = new TreeSet<>();
+        TreeMap<Long,Integer> map = new TreeMap<>();
+        for(int x:arr){
+            set.add((long)x);
+        }
+        long prev = set.first();
+        for(Long x:set)
         {
+            Long diff = (x-prev);
+            sum+=diff;
+            add(map,diff);
+            prev = x;
+        }
+        if(set.size()<=1)
+            out.printLine(0);
+        else
+            out.printLine(sum-map.lastKey());
+        while(q-- >0)
+        {
+            int type = in.nextInt();
+            long val = in.nextLong();
+            if(type==0)
+            {
+                set.remove(val);
+                Long higher = set.higher(val);
+                Long lower = set.lower(val); 
+                if(higher==null && lower==null)
+                {
+                    // out.printLine(0);
+                    sum=0;
+                    map.clear();
+                    // continue outer;
+                }
+                else if(lower==null)
+                {
+                    long diff = higher-val;
+                    sum-=diff;
+                    remove(map,diff);
+                }
+                else if(higher==null)
+                {
+                    long diff = val-lower;
+                    sum-=diff;
+                    remove(map,diff);
+                }
+                else
+                {
+                    long diff1 = val-lower;
+                    long diff2 = higher-val;
+                    remove(map,diff1);
+                    remove(map,diff2);
+                    add(map,higher-lower);
+                    // max = Math.max(max,higher-lower);
+                }
+                // out.printLine(set + " " + sum + "  " + max);
+                if(set.size()<=1)
+                    out.printLine(0);
+                else
+                    out.printLine(sum-map.lastKey());
+            }
+            else
+            {
+                set.add(val);
+                Long higher = set.higher(val);
+                Long lower = set.lower(val);
+                if(higher==null && lower==null)
+                {
+                    // out.printLine(0);
+                    sum=0;
+                    // continue outer;
+                }
+                else if(lower==null)
+                {
+                    long diff = higher-val;
+                    sum+=diff;
+                    add(map,diff);
+                }
+                else if(higher==null)
+                {
+                    long diff = val-lower;
+                    sum+=diff;
+                    add(map,diff);
+                }
+                else
+                {
+                    long diff1 = val-lower;
+                    long diff2 = higher-val;
+                    remove(map,(higher-lower));
+                    add(map,diff1);
+                    add(map,diff2);
+                }
+                // out.printLine(set + " " + sum + "  " + max);
+                if(set.size()<=1)
+                    out.printLine(0);
+                else
+                    out.printLine(sum-map.lastKey());
+            }
+            out.flush();
         }
         out.flush();
         out.close();
     }
-}
-
-
-
-
-
-
-public long pow(int a,int b)
-{
-    int res = 1;
-    while(b>1)
-    {
-        if(b%2==1)
-        {
-            res = res * a;
-        }
-        a = a*a;
-        b = b>>1;
-    }
-    return res;
 }

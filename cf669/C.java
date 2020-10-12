@@ -1,6 +1,6 @@
 import java.util.*;
 import java.io.*;
-public class Main{
+public class C{
     static class InputReader {
 
         private final InputStream stream;
@@ -175,31 +175,56 @@ public class Main{
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
-        int t = in.nextInt();
-        while(t-- >0)
+        int n = in.nextInt();
+        if(n==1)
         {
+            out.printLine("! 1");
+            out.flush();
+            return;
         }
-        out.flush();
+        int[] res = new int[n];
+        int i = 0,j=n-1;
+        Set<Integer> set = new HashSet<>();
+        for(int x=1;x<=n;x++)
+            set.add(x);
+        while(i<j)
+        {
+            int x,y;
+            out.printLine("? " + (i+1) + " " + (j+1));
+            out.flush();
+            x = in.nextInt();
+            out.printLine("? "+ (j+1) + " " + (i+1));
+            out.flush();
+            y = in.nextInt();
+            if(x<y)
+            {
+                res[j] = y;
+                set.remove(y);
+                j--;
+            }
+            else
+            {
+                res[i] = x;
+                set.remove(x);
+                i++;
+            }
+            // out.printLine(Arrays.toString(res));
+            // out.flush();
+        }
+        assert(set.size()==1);
+        int toAdd = set.iterator().next();
+        for(int ix=0;ix<n;ix++)
+        {
+            if(res[ix]==0){
+                res[ix] = toAdd;
+                break;
+            }
+        }
+        out.print("! ");
+        for(int x:res)
+        {
+            out.print(x + " ");
+        }
         out.close();
     }
-}
-
-
-
-
-
-
-public long pow(int a,int b)
-{
-    int res = 1;
-    while(b>1)
-    {
-        if(b%2==1)
-        {
-            res = res * a;
-        }
-        a = a*a;
-        b = b>>1;
-    }
-    return res;
 }

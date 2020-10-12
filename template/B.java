@@ -171,13 +171,19 @@ public class B{
         }
         return ans;
     }
-
+    static void sort(int[] a) {
+		ArrayList<Integer> l=new ArrayList<>();
+		for (int i:a) l.add(i);
+		Collections.sort(l);
+		for (int i=0; i<a.length; i++) a[i]=l.get(i);
+	}
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         int t = in.nextInt();
         while(t-- >0)
         {
+            
         }
         out.flush();
         out.close();

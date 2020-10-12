@@ -1,6 +1,6 @@
 import java.util.*;
 import java.io.*;
-public class Main{
+public class B{
     static class InputReader {
 
         private final InputStream stream;
@@ -171,35 +171,42 @@ public class Main{
         }
         return ans;
     }
-
+    static boolean valid(int[] map)
+    {
+        if(map['G'-'A']!=map['C'-'A'])
+            return false;
+        if(map['T'-'A']!=map['A'-'A'])
+            return false;
+        return true;
+    }
     public static void main(String[] args) {
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
-        int t = in.nextInt();
-        while(t-- >0)
+        int n = in.nextInt();
+        char[] s = in.nextLine().toCharArray();
+        long res = 0;
+        for(int len=2;len<=n;len++)
         {
+            int[] map = new int[26];
+            for(int i=0;i<len;i++)
+            {
+                map[s[i]-'A']++;
+            }
+            int i = 0,j=len-1;
+            while(j<n)
+            {
+                // out.printLine(Arrays.toString(map) + " " + len);
+                if(valid(map))
+                    res++;
+                map[s[i]-'A']--;
+                i++;
+                j++;
+                if(j<n)
+                    map[s[j]-'A']++;
+            }
         }
+        out.printLine(res);
         out.flush();
         out.close();
     }
-}
-
-
-
-
-
-
-public long pow(int a,int b)
-{
-    int res = 1;
-    while(b>1)
-    {
-        if(b%2==1)
-        {
-            res = res * a;
-        }
-        a = a*a;
-        b = b>>1;
-    }
-    return res;
 }

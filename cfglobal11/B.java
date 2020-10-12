@@ -1,6 +1,6 @@
 import java.util.*;
 import java.io.*;
-public class Main{
+public class B{
     static class InputReader {
 
         private final InputStream stream;
@@ -176,30 +176,81 @@ public class Main{
         InputReader in = new InputReader(System.in);
         OutputWriter out = new OutputWriter(System.out);
         int t = in.nextInt();
-        while(t-- >0)
+        outer:while(t-- >0)
         {
+            int n = in.nextInt(),k = in.nextInt();
+            char[] s = in.nextLine().toCharArray();
+            long res = 0;
+            int count = 0;
+            long[] pre = new long[n+1];
+            for(int i=1;i<=n;i++)
+            {
+                if(s[i-1]=='W'){
+                    if(i>1 && s[i-2]=='W')
+                    {
+                        pre[i] = pre[i-1]+2;
+                    }
+                    else
+                    {
+                        pre[i] = pre[i-1]+1;
+                    }
+                }
+                else
+                {
+                    pre[i] += pre[i-1];
+                }
+            }
+            if(k==0)
+            {
+                out.printLine(pre[n]);
+                continue outer;
+            }
+            // out.printLine(Arrays.toString(pre));
+            int i = 0,j = 0;
+            while(j<n)
+            {
+                // System.out.println(i+ " " + j);
+                while(j<n && count<=k)
+                {
+                    // System.out.println(j);
+                    if(s[j]=='L')
+                        count++;
+                    if(count<=k){
+                        int len = j-i+1;
+                        long score = 1+2*(len-1)+ pre[i] + (pre[n]-pre[j+1]);
+                        // System.out.println(i+ " j:" + j + " Score:" + score + " " + count);
+                        res = Math.max(res,score);
+                    }
+                    j++;
+                }
+                while(i<=j && count>k)
+                {
+                    // System.out.println(i);
+                    if(count<=k){
+                        int len = j-i+1;
+                        long score = 1+2*(len-1)+pre[i] + (pre[n]-pre[j+1]);
+                        res = Math.max(res,score);
+                    }
+                    if(s[i]=='L')
+                        count--;
+                    i++;
+                }
+            }
+            j = n-1;
+            while(i<n)
+            {
+                if(count<=k){
+                    int len = j-i+1;
+                    long score = 1+2*(len-1)+pre[i] + (pre[n]-pre[j+1]);
+                    res = Math.max(res,score);
+                }
+                if(s[i]=='L')
+                    count--;
+                i++;
+            }
+            out.printLine(res);
         }
         out.flush();
         out.close();
     }
-}
-
-
-
-
-
-
-public long pow(int a,int b)
-{
-    int res = 1;
-    while(b>1)
-    {
-        if(b%2==1)
-        {
-            res = res * a;
-        }
-        a = a*a;
-        b = b>>1;
-    }
-    return res;
 }
